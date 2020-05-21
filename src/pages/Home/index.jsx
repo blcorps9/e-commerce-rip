@@ -14,6 +14,7 @@ import {
   onChangeProdFilter,
 } from "../../store/actions";
 
+import FilterCard from "../../components/FilterCard";
 import ProductCard from "../../components/ProductCard";
 
 import { getSorted } from "../../utils";
@@ -31,7 +32,7 @@ class Home extends Component {
     this.state = {
       isSortMenuOpen: false,
       currentSortOrder: currentSortOrder,
-      currentFilters: {},
+      filterOpts: props.common.filterOpts,
       inventory: getSorted(
         props.inventory || [],
         sortMeta.prop,
@@ -73,7 +74,7 @@ class Home extends Component {
       });
 
       return {
-        currentFilters: props.common.filterOpts,
+        filterOpts: props.common.filterOpts,
         inventory: _unionBy(filteredBySize, filteredByColor, "sku"),
       };
     }
@@ -169,70 +170,26 @@ class Home extends Component {
         <div className="row">
           <div className="col-2">
             <div className="row mt-4 ml-4">
-              <ul className="list-group" style={{ width: "100%" }}>
-                <li
-                  className="list-group-item active"
-                  aria-disabled="true"
-                  key="0"
-                >
-                  <h5>Sizes</h5>
-                </li>
-                {SIZES.map((item, index) => (
-                  <li className="list-group-item" key={item.short}>
-                    <div className="custom-control custom-radio">
-                      <input
-                        type="checkbox"
-                        id={`customRadioSize${index}`}
-                        name="customRadio"
-                        data-type="size"
-                        data-value={item.short}
-                        checked={selectedFilters.size.includes(item.short)}
-                        onChange={this.onSelectFilter}
-                        className="custom-control-input"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor={`customRadioSize${index}`}
-                      >
-                        {item.long}
-                      </label>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <FilterCard
+                type="size"
+                title="Sizes"
+                rows={SIZES}
+                valProp="short"
+                labelProp="long"
+                selectedFilters={selectedFilters.size}
+                onSelectFilter={this.onSelectFilter}
+              />
             </div>
             <div className="row mt-4 ml-4">
-              <ul className="list-group" style={{ width: "100%" }}>
-                <li
-                  className="list-group-item active"
-                  aria-disabled="true"
-                  key="0"
-                >
-                  <h5>Colors</h5>
-                </li>
-                {COLORS.map((item, index) => (
-                  <li className="list-group-item" key={item.key}>
-                    <div className="custom-control custom-radio">
-                      <input
-                        type="checkbox"
-                        id={`customRadioColor${index}`}
-                        name="customRadio"
-                        data-type="color"
-                        data-value={item.name}
-                        checked={selectedFilters.color.includes(item.name)}
-                        onChange={this.onSelectFilter}
-                        className="custom-control-input"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor={`customRadioColor${index}`}
-                      >
-                        {item.name}
-                      </label>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <FilterCard
+                type="color"
+                title="Colors"
+                rows={COLORS}
+                valProp="name"
+                labelProp="name"
+                selectedFilters={selectedFilters.color}
+                onSelectFilter={this.onSelectFilter}
+              />
             </div>
           </div>
           <div className="col-10">
