@@ -24,6 +24,8 @@ import {
   REMOVE_FROM_FAV_REQUEST,
   REMOVE_FROM_FAV_SUCCESS,
   REMOVE_FROM_FAV_FAILURE,
+  COMMON_SORT_ORDER_CHANGE,
+  COMMON_PROD_FILTER_CHANGE,
 } from "./actionTypes";
 
 export function getProducts(query) {
@@ -121,5 +123,17 @@ export const removeFromFavList = (product) => {
       .then(() => {
         dispatch({ type: HIDE_LOADER });
       });
+  };
+};
+
+export const onChangeSortingOrder = (newSortOrderIndex = 0) => {
+  return (dispatch) => {
+    dispatch({ type: COMMON_SORT_ORDER_CHANGE, payload: newSortOrderIndex });
+  };
+};
+
+export const onChangeProdFilter = (opt) => {
+  return (dispatch) => {
+    dispatch({ type: COMMON_PROD_FILTER_CHANGE, payload: opt });
   };
 };

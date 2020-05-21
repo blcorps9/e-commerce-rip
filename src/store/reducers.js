@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
 
 import counter from "../pages/Counter/reducer";
-import { inventory, spinner, cart, favList } from "./reducer";
+import { inventory, spinner, cart, favList, common } from "./reducer";
 
 export default (history) =>
   combineReducers({
@@ -11,5 +11,6 @@ export default (history) =>
     inventory,
     cart,
     favList,
+    common,
     router: connectRouter(history),
   });
