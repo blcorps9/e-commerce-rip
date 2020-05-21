@@ -275,3 +275,10 @@ export const BREADCRUMBS = {
 
 export const ITEM_FAV_COLOR_DEFAULT = "#000";
 export const ITEM_FAV_COLOR_ADDED = "#e91e63";
+
+export const SORT_ORDERS = [
+  { label: "Name A-Z", prop: "name", order: "asc", key: uuidv4() },
+  { label: "Name Z-A", prop: "name", order: "desc", key: uuidv4() },
+  { label: "Price Low-High", prop: "salePrice", order: "asc", key: uuidv4() },
+  { label: "Price High-Low", prop: "salePrice", order: "desc", key: uuidv4() },
+];

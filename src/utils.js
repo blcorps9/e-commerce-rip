@@ -71,3 +71,24 @@ export function formatCurrency(num = 0) {
     currency: "INR",
   });
 }
+
+export function getSorted(data = [], prop, order = "asc") {
+  return data.sort((a, b) => {
+    const valA = typeof a[prop] === "string" ? a[prop].toUpperCase() : a[prop];
+    const valB = typeof b[prop] === "string" ? b[prop].toUpperCase() : b[prop];
+
+    if (order === "desc") {
+      if (valA > valB) return -1;
+
+      if (valA < valB) return 1;
+
+      return 0;
+    }
+
+    if (valA < valB) return -1;
+
+    if (valA > valB) return 1;
+
+    return 0;
+  });
+}

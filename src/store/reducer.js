@@ -16,6 +16,8 @@ import {
   REMOVE_FROM_FAV_REQUEST,
   REMOVE_FROM_FAV_SUCCESS,
   REMOVE_FROM_FAV_FAILURE,
+  COMMON_SORT_ORDER_CHANGE,
+  COMMON_PROD_FILTER_CHANGE,
 } from "./actionTypes";
 
 const initialInventoryState = {
@@ -91,6 +93,24 @@ export function favList(state = initialFavListState, action) {
       return { ...state, inProgress: false, data: action.payload };
     case REMOVE_FROM_FAV_FAILURE:
       return { ...state, inProgress: false, err: action.payload };
+    default:
+      return state;
+  }
+}
+
+const initialCommonState = {
+  currentSortOrder: 0,
+  filterOpts: {},
+};
+export function common(state = initialCommonState, action) {
+  switch (action.type) {
+    case COMMON_SORT_ORDER_CHANGE:
+      return { ...state, currentSortOrder: action.payload };
+    case COMMON_PROD_FILTER_CHANGE:
+      return {
+        ...state,
+        filterOpts: { ...state.filterOpts, ...action.payload },
+      };
     default:
       return state;
   }
