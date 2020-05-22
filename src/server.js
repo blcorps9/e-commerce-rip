@@ -228,3 +228,25 @@ export function removeFromFavList(product) {
     }, delay);
   });
 }
+
+export function getPropductDetails(sku) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const product = PRODUCTS_LIST.find((item) => item.sku === sku);
+
+      if (product) {
+        return resolve({
+          status: 200,
+          data: product,
+        });
+      }
+
+      return reject({
+        status: 404,
+        error: {
+          message: "Product is not available",
+        },
+      });
+    }, delay);
+  });
+}

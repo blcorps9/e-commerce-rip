@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import cx from "classnames";
 import _get from "lodash/get";
 import _map from "lodash/map";
@@ -38,6 +39,7 @@ class Home extends Component {
         sortMeta.prop,
         sortMeta.order
       ),
+      openFilters: [],
     };
   }
 
@@ -126,10 +128,34 @@ class Home extends Component {
     }
   };
 
+  onClickFilterHeader = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const type = e.currentTarget.getAttribute("data-filter");
+
+    this.setState((pS) => {
+      const openFilters = [...pS.openFilters];
+
+      if (openFilters.includes(type)) {
+        _remove(openFilters, (n) => n === type);
+      } else {
+        openFilters.push(type);
+      }
+
+      return { openFilters };
+    });
+  };
+
   render() {
     const { cart, common } = this.props;
     const cartItemsSku = _map(cart, "sku");
-    const { isSortMenuOpen, currentSortOrder, inventory } = this.state;
+    const {
+      isSortMenuOpen,
+      currentSortOrder,
+      inventory,
+      openFilters,
+    } = this.state;
     const selectedFilters = {
       size: _get(common, "filterOpts.size", []),
       color: _get(common, "filterOpts.color", []),
@@ -176,8 +202,11 @@ class Home extends Component {
                 rows={SIZES}
                 valProp="short"
                 labelProp="long"
+                isExpandable
                 selectedFilters={selectedFilters.size}
                 onSelectFilter={this.onSelectFilter}
+                isOpen={openFilters.includes("size")}
+                onClickHeader={this.onClickFilterHeader}
               />
             </div>
             <div className="row mt-4 ml-4">
@@ -187,23 +216,27 @@ class Home extends Component {
                 rows={COLORS}
                 valProp="name"
                 labelProp="name"
+                isExpandable
                 selectedFilters={selectedFilters.color}
                 onSelectFilter={this.onSelectFilter}
+                isOpen={openFilters.includes("color")}
+                onClickHeader={this.onClickFilterHeader}
               />
             </div>
           </div>
           <div className="col-10">
             <div className="row m-4">
               {inventory.map((product) => (
-                <div
-                  className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3"
+                <Link
+                  className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 silent-link"
                   key={product.sku}
+                  to={product.landingPageUrl}
                 >
                   <ProductCard
                     product={product}
                     isInCart={cartItemsSku.includes(product.sku)}
                   />
-                </div>
+                </Link>
               ))}
             </div>
           </div>
