@@ -216,6 +216,15 @@ body {
   .list-group {
     width: 100%;
     overflow-y: scroll;
+
+    &.expandable {
+      max-height: 0;
+      transition: max-height 0.5s ease;
+
+      &.show {
+        max-height: 24rem;
+      }
+    }
   }
 }
 
@@ -272,5 +281,19 @@ body {
     line-height: 1rem;
     float: left;
     margin: 0.125rem;
+  }
+}
+
+.silent-link,
+.silent-link:hover,
+.silent-link:active {
+  text-decoration: none;
+}
+
+.pdp-page {
+  .dropdown-menu.quantity {
+    max-height: 10rem;
+    overflow: hidden;
+    overflow-y: scroll;
   }
 }

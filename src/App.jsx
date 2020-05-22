@@ -8,6 +8,8 @@ import ContactUs from "./pages/ContactUs";
 import ServicePolicies from "./pages/ServicePolicies";
 import NotFound from "./pages/NotFound";
 
+import PDP from "./pages/PDP";
+
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -61,12 +63,21 @@ class App extends Component {
           </Route>
           <Route
             exact
-            path={["/aboutUs", "/contactUs", "/servicePolicies", "/"]}
+            path={[
+              "/aboutUs",
+              "/contactUs",
+              "/servicePolicies",
+              "/products/:skuId/:productName",
+              "/",
+            ]}
           >
             <MainLayout>
               <Switch>
                 <Route exact path="/">
                   <Home />
+                </Route>
+                <Route path="/products/:skuId/:productName">
+                  {({ match }) => <PDP match={match} />}
                 </Route>
                 <Route path="/aboutUs">
                   <AboutUs />

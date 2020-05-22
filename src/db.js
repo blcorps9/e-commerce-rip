@@ -303,6 +303,7 @@ export const PRODUCTS_LIST = [
     name: "Denim Wolfpack",
     salePrice: 1129.19,
     price: 1970.71,
+    quantity: 6,
     colors: [
       {
         name: "Blue",
@@ -353,6 +354,7 @@ export const PRODUCTS_LIST = [
     name: "Gulf Compound",
     salePrice: 1622.29,
     price: 3549.8,
+    quantity: 7,
     colors: [
       {
         name: "Saddle Brown",
@@ -403,6 +405,7 @@ export const PRODUCTS_LIST = [
     name: "Denim Parka",
     salePrice: 1047.03,
     price: 1226.87,
+    quantity: 2,
     colors: [
       {
         name: "Gray",
@@ -453,6 +456,7 @@ export const PRODUCTS_LIST = [
     name: "Denim Bomber",
     salePrice: 2110.47,
     price: 2213.31,
+    quantity: 10,
     colors: [
       {
         name: "White Smoke",
@@ -503,6 +507,7 @@ export const PRODUCTS_LIST = [
     name: "Denim Arrow",
     salePrice: 5101.22,
     price: 8323.02,
+    quantity: 16,
     colors: [
       {
         name: "Snow",
@@ -553,6 +558,7 @@ export const PRODUCTS_LIST = [
     name: "Parka Stealth",
     salePrice: 2415.4,
     price: 7607.21,
+    quantity: 10,
     colors: [
       {
         name: "Fire Brick",
@@ -603,6 +609,7 @@ export const PRODUCTS_LIST = [
     name: "Bomber Denim",
     salePrice: 1074.26,
     price: 1792.34,
+    quantity: 9,
     colors: [
       {
         name: "Azure",
@@ -653,6 +660,7 @@ export const PRODUCTS_LIST = [
     name: "Navigator Compound",
     salePrice: 3360.18,
     price: 9547.68,
+    quantity: 3,
     colors: [
       {
         name: "Cadet Blue",
@@ -703,6 +711,7 @@ export const PRODUCTS_LIST = [
     name: "Operator Shacket",
     salePrice: 7248.52,
     price: 9239.77,
+    quantity: 2,
     colors: [
       {
         name: "Gray",
@@ -753,6 +762,7 @@ export const PRODUCTS_LIST = [
     name: "Denim Shacket",
     salePrice: 4346.68,
     price: 4435.66,
+    quantity: 5,
     colors: [
       {
         name: "Purple",
@@ -803,6 +813,7 @@ export const PRODUCTS_LIST = [
     name: "Long-sleeve top",
     salePrice: 1195.15,
     price: 2091.62,
+    quantity: 6,
     colors: [
       {
         name: "Moccasin",
@@ -853,6 +864,7 @@ export const PRODUCTS_LIST = [
     name: "Dress pants",
     salePrice: 1111.93,
     price: 3098.32,
+    quantity: 3,
     colors: [
       {
         name: "Blue Violet",
@@ -903,6 +915,7 @@ export const PRODUCTS_LIST = [
     name: "T-shirt",
     salePrice: 1972,
     price: 2183.36,
+    quantity: 12,
     colors: [
       {
         name: "White Smoke",
@@ -953,6 +966,7 @@ export const PRODUCTS_LIST = [
     name: "Long-sleeve top",
     salePrice: 1498.94,
     price: 5350.79,
+    quantity: 8,
     colors: [
       {
         name: "Indigo",
@@ -1003,6 +1017,7 @@ export const PRODUCTS_LIST = [
     name: "Tank top",
     salePrice: 2581.89,
     price: 5168.9,
+    quantity: 4,
     colors: [
       {
         name: "Dark Salmon",
@@ -1053,6 +1068,7 @@ export const PRODUCTS_LIST = [
     name: "Tank top",
     salePrice: 1045.05,
     price: 1292.52,
+    quantity: 6,
     colors: [
       {
         name: "Amethyst",
@@ -1103,6 +1119,7 @@ export const PRODUCTS_LIST = [
     name: "Hoodie",
     salePrice: 2012.43,
     price: 5052.98,
+    quantity: 6,
     colors: [
       {
         name: "Olive",
@@ -1153,6 +1170,7 @@ export const PRODUCTS_LIST = [
     name: "Dress pants",
     salePrice: 1162.23,
     price: 5082.19,
+    quantity: 4,
     colors: [
       {
         name: "Khaki",
@@ -1203,6 +1221,7 @@ export const PRODUCTS_LIST = [
     name: "Dress",
     salePrice: 3626.65,
     price: 8597.54,
+    quantity: 4,
     colors: [
       {
         name: "Lemon Chiffon",
@@ -1253,6 +1272,7 @@ export const PRODUCTS_LIST = [
     name: "Sweater",
     salePrice: 1325.09,
     price: 1990.4,
+    quantity: 6,
     colors: [
       {
         name: "Gray",
