@@ -9,6 +9,7 @@ import ServicePolicies from "./pages/ServicePolicies";
 import NotFound from "./pages/NotFound";
 
 import PDP from "./pages/PDP";
+import CartPage from "./pages/Cart";
 
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -68,6 +69,7 @@ class App extends Component {
               "/contactUs",
               "/servicePolicies",
               "/products/:skuId/:productName",
+              "/cart",
               "/",
             ]}
           >
@@ -78,6 +80,9 @@ class App extends Component {
                 </Route>
                 <Route path="/products/:skuId/:productName">
                   {({ match }) => <PDP match={match} />}
+                </Route>
+                <Route path="/cart">
+                  <CartPage />
                 </Route>
                 <Route path="/aboutUs">
                   <AboutUs />

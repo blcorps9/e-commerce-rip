@@ -293,7 +293,13 @@ body {
 .pdp-page {
   .dropdown-menu.quantity {
     max-height: 10rem;
+    min-width: auto;
     overflow: hidden;
     overflow-y: scroll;
+  }
+}
+.cart-page {
+  .cart-item-container {
+    padding: 0 15px;
   }
 }

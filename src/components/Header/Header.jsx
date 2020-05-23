@@ -88,14 +88,16 @@ class Header extends Component {
   };
 
   onClickCatDropdown = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+    if (e.stopPropagation && e.preventDefault) {
+      e.stopPropagation();
+      e.preventDefault();
 
-    const catDropdown = e.currentTarget.getAttribute("data-data");
+      const catDropdown = e.currentTarget.getAttribute("data-data");
 
-    this.setState((pS) => ({
-      catDropdown: pS.catDropdown === catDropdown ? "" : catDropdown,
-    }));
+      this.setState((pS) => ({
+        catDropdown: pS.catDropdown === catDropdown ? "" : catDropdown,
+      }));
+    }
   };
 
   fetchProducts = (query) => {
@@ -192,7 +194,7 @@ class Header extends Component {
                   "position-relative": item.link === "cart",
                   "dropdown-toggle": hasDropdown,
                 }),
-                href: item.link,
+                to: item.link,
                 "data-data": item.link,
               };
 
@@ -212,7 +214,7 @@ class Header extends Component {
                   onMouseLeave={this.onMouseLeave}
                   key={item.key}
                 >
-                  <a {...linkProps}>
+                  <Link {...linkProps}>
                     {item.label}&nbsp;
                     {item.icon && item.iconColor && (
                       <FontAwesomeIcon
@@ -223,7 +225,7 @@ class Header extends Component {
                     {item.link === "cart" && (
                       <span className="cart-count">{cartCount}</span>
                     )}
-                  </a>
+                  </Link>
                   {isDropdownOpen && (
                     <div className="dropdown-menu show">
                       {subItems.map((subItem) => {
@@ -232,14 +234,14 @@ class Header extends Component {
                         }
 
                         return (
-                          <a
+                          <Link
                             key={subItem.key ? subItem.key : uuidv4()}
                             className="dropdown-item"
-                            href={subItem.link}
+                            to={subItem.link}
                             data-data={subItem.label}
                           >
                             {subItem.label}
-                          </a>
+                          </Link>
                         );
                       })}
                     </div>
