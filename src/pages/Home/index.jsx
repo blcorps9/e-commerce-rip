@@ -225,7 +225,7 @@ class Home extends Component {
             </div>
           </div>
           <div className="col-10">
-            <div className="row m-4">
+            <div className="row my-4">
               {inventory.map((product) => (
                 <Link
                   className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 silent-link"

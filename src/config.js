@@ -9,30 +9,30 @@ export const DEBOUNCED_DELAY = 350; // MS
 export const NAV_MENU_ITEMS = [
   {
     key: uuidv4(),
-    link: "home",
+    link: "/",
     label: "Home",
     subItems: [],
   },
   {
     key: uuidv4(),
-    link: "categories",
+    link: "/categories",
     label: "Categories",
     subItems: [
       {
         key: uuidv4(),
-        link: "categories/men",
+        link: "/categories/men",
         label: "Men",
         subItems: [],
       },
       {
         key: uuidv4(),
-        link: "categories/women",
+        link: "/categories/women",
         label: "women",
         subItems: [],
       },
       {
         key: uuidv4(),
-        link: "categories/kids",
+        link: "/categories/kids",
         label: "Kids",
         subItems: [],
       },
@@ -40,7 +40,7 @@ export const NAV_MENU_ITEMS = [
   },
   {
     key: uuidv4(),
-    link: "onSale",
+    link: "/onSale",
     label: "On Sale",
 
     icon: "fire",
@@ -50,7 +50,7 @@ export const NAV_MENU_ITEMS = [
   },
   {
     key: uuidv4(),
-    link: "myAccount",
+    link: "/myAccount",
     label: "My Account",
 
     icon: "user-circle",
@@ -83,7 +83,7 @@ export const NAV_MENU_ITEMS = [
   },
   {
     key: uuidv4(),
-    link: "cart",
+    link: "/cart",
     label: "Cart",
 
     icon: "shopping-cart",
@@ -270,6 +270,10 @@ export const BREADCRUMBS = {
       link: "/servicePolicies",
       key: uuidv4(),
     },
+  ],
+  cart: [
+    { label: "Home", link: "/", key: uuidv4() },
+    { label: "Shopping Cart", link: "/cart", key: uuidv4() },
   ],
 };
 

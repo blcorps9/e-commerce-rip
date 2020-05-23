@@ -51,11 +51,11 @@ class ProductCard extends Component {
             <Prices price={product.price} salePrice={product.salePrice} />
           </div>
           <p className="card-text">{product.description}</p>
-          <div className="row actions">
+          <div className="row actions justify-content-between">
             <button
               onClick={this.addToCart}
               data-sku={product.sku}
-              className="btn btn-primary col-5 mx-2"
+              className="btn btn-primary col-5 mx-1"
             >
               Add To Cart
             </button>
@@ -63,7 +63,7 @@ class ProductCard extends Component {
               <button
                 onClick={this.removeFromCart}
                 data-sku={product.sku}
-                className="btn btn-primary  col-5 mx-2"
+                className="btn btn-primary col-5 mx-1"
               >
                 Remove From Cart
               </button>

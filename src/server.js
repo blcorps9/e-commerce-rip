@@ -1,6 +1,7 @@
 // Settimeout
 // Promise
 // HTTP status codes
+import _map from "lodash/map";
 
 import { uuidv4 } from "./utils";
 import { PRODUCTS_LIST } from "./db";
@@ -246,6 +247,24 @@ export function getPropductDetails(sku) {
         error: {
           message: "Product is not available",
         },
+      });
+    }, delay);
+  });
+}
+
+export function getCartData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myCart = JSON.parse(localStorage.getItem("myCart") || "[]");
+      const cartData = _map(myCart, (product) => {
+        const _product = PRODUCTS_LIST.find((item) => item.sku === product.sku);
+
+        return { ..._product, quantity: product.quantity };
+      });
+
+      return resolve({
+        status: 200,
+        data: cartData,
       });
     }, delay);
   });
