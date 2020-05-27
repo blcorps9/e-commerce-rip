@@ -43,19 +43,28 @@ class AddToFavList extends Component {
 
   render() {
     const { onHover } = this.state;
-    const { favList, skuId } = this.props;
+    const { favList, skuId, displayInline } = this.props;
     const isSelected = favList.includes(skuId) || onHover;
 
+    const rootProps = {
+      "data-sku": skuId,
+      className: "fav-icon",
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave,
+      onClick: this.onClick,
+    };
+
+    if (displayInline) {
+      rootProps.style = { display: "inline-block" };
+    }
+
     return (
-      <div
-        data-sku={skuId}
-        className="fav-icon"
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
-      >
+      <div {...rootProps}>
         <FontAwesomeIcon
-          icon={{ prefix: isSelected ? "fas" : "far", iconName: "heart" }}
+          icon={{
+            prefix: isSelected ? "fas" : "far",
+            iconName: "heart",
+          }}
           color={isSelected ? ITEM_FAV_COLOR_ADDED : ITEM_FAV_COLOR_DEFAULT}
           size="2x"
         />

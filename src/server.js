@@ -6,7 +6,7 @@ import _map from "lodash/map";
 import { uuidv4 } from "./utils";
 import { PRODUCTS_LIST } from "./db";
 
-const delay = 0;
+const delay = 2;
 
 export function getInitialState() {
   return {
@@ -18,6 +18,11 @@ export function getInitialState() {
     favList: {
       inProgress: false,
       data: JSON.parse(localStorage.getItem("myFavList") || "[]"),
+      err: null,
+    },
+    myAddresses: {
+      inProgress: false,
+      data: JSON.parse(localStorage.getItem("myAddress") || "[]"),
       err: null,
     },
   };
@@ -259,12 +264,65 @@ export function getCartData() {
       const cartData = _map(myCart, (product) => {
         const _product = PRODUCTS_LIST.find((item) => item.sku === product.sku);
 
-        return { ..._product, quantity: product.quantity };
+        return {
+          ..._product,
+          availableQuantity: _product.quantity,
+          quantity: product.quantity,
+        };
       });
 
       return resolve({
         status: 200,
         data: cartData,
+      });
+    }, delay);
+  });
+}
+
+export function updateItemQuantity({ sku, updatedQty }) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myCart = JSON.parse(localStorage.getItem("myCart") || "[]");
+      const cartData = _map(myCart, (product) => {
+        const _product = PRODUCTS_LIST.find((item) => item.sku === product.sku);
+
+        if (sku === product.sku) {
+          return {
+            ..._product,
+            availableQuantity: _product.quantity,
+            quantity: updatedQty,
+          };
+        }
+
+        return {
+          ..._product,
+          availableQuantity: _product.quantity,
+          quantity: product.quantity,
+        };
+      });
+
+      return resolve({
+        status: 200,
+        data: cartData,
+      });
+    }, delay);
+  });
+}
+
+export function saveNewAddress(address) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
+
+      address.key = uuidv4();
+
+      myAddress.push(address);
+
+      localStorage.setItem("myAddress", JSON.stringify(myAddress));
+
+      return resolve({
+        status: 200,
+        data: myAddress,
       });
     }, delay);
   });

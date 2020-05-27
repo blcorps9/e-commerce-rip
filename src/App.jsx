@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 
 import PDP from "./pages/PDP";
 import CartPage from "./pages/Cart";
+import DeliveryPage from "./pages/DeliveryPage";
 
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -70,6 +71,7 @@ class App extends Component {
               "/servicePolicies",
               "/products/:skuId/:productName",
               "/cart",
+              "/delivery",
               "/",
             ]}
           >
@@ -83,6 +85,9 @@ class App extends Component {
                 </Route>
                 <Route path="/cart">
                   <CartPage />
+                </Route>
+                <Route path="/delivery">
+                  <DeliveryPage />
                 </Route>
                 <Route path="/aboutUs">
                   <AboutUs />
