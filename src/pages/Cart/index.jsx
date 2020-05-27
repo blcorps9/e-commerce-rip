@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import _get from "lodash/get";
+import _range from "lodash/range";
 import _sampleSize from "lodash/sampleSize";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -8,11 +9,20 @@ import cx from "classnames";
 import Placeholder from "../../components/Svgs/Placeholder";
 import Colors from "../../components/Colors";
 import Prices from "../../components/Prices";
+import AddToFavList from "../../components/AddToFavList";
 
 import { removeFromCart } from "../../store/actions";
-import { getCartData } from "./actions";
+import { getCartData, updateItemQuantity } from "./actions";
 
 class CartPage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeQtyMenu: null,
+    };
+  }
+
   componentDidMount() {
     this.props.getCartData();
   }
@@ -25,9 +35,35 @@ class CartPage extends Component {
     this.props.removeFromCart({ sku }).then(this.props.getCartData);
   };
 
+  onMouseEnterQty = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const sku = e.currentTarget.getAttribute("data-sku");
+
+    this.setState({ activeQtyMenu: sku });
+  };
+
+  onMouseLeaveQty = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.setState({ activeQtyMenu: null });
+  };
+
+  onUpdateQantity = (e) => {
+    const updatedQty = Number(e.currentTarget.getAttribute("data-qty"));
+    const sku = e.currentTarget.getAttribute("data-sku");
+
+    this.setState({ activeQtyMenu: null }, () => {
+      this.props.updateItemQuantity({ sku, updatedQty });
+    });
+  };
+
   render() {
     const { cartData } = this.props;
     const itemCount = cartData.length;
+    const { activeQtyMenu } = this.state;
 
     if (itemCount === 0) {
       return (
@@ -53,6 +89,7 @@ class CartPage extends Component {
             <div className="cart-item-container">
               {cartData.map((item, index) => {
                 const color = _sampleSize(item.colors, 1)[0];
+                const { quantity, availableQuantity } = item;
 
                 return (
                   <div
@@ -75,7 +112,41 @@ class CartPage extends Component {
                       <span>{color.name}</span>
                     </div>
                     <div className="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
-                      {item.quantity}
+                      <div
+                        className="dropdown"
+                        data-sku={item.sku}
+                        onMouseEnter={this.onMouseEnterQty}
+                        onMouseLeave={this.onMouseLeaveQty}
+                      >
+                        <button
+                          className={cx("btn btn-secondary dropdown-toggle", {
+                            show: activeQtyMenu === item.sku,
+                          })}
+                          type="button"
+                        >
+                          {quantity}
+                        </button>
+                        <div
+                          className={cx("dropdown-menu", {
+                            show: activeQtyMenu === item.sku,
+                          })}
+                          aria-labelledby="dropdownMenuButton"
+                        >
+                          {_range(1, availableQuantity + 1, 1).map(
+                            (menuItem, index) => (
+                              <span
+                                className="dropdown-item"
+                                key={index}
+                                data-qty={menuItem}
+                                data-sku={item.sku}
+                                onClick={this.onUpdateQantity}
+                              >
+                                {menuItem}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
                     </div>
                     <div className="col-6 col-sm-6 col-md-2 col-lg-2 col-xl-2">
                       <Prices
@@ -85,19 +156,27 @@ class CartPage extends Component {
                       />
                     </div>
                     <div className="col-5 col-sm-5 col-md-2 col-lg-2 col-xl-2">
-                      <button
+                      <span
                         onClick={this.removeFromCart}
                         data-sku={item.sku}
                         className="btn btn-primary mx-2"
                       >
                         Remove
-                      </button>
+                      </span>
+                      &nbsp;
+                      <AddToFavList skuId={item.sku} displayInline />
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
+        </div>
+
+        <div className="col-1 offset-10 mt-2">
+          <Link className="btn btn-primary" to="/delivery">
+            Continue
+          </Link>
         </div>
       </div>
     );
@@ -112,5 +191,6 @@ export default connect(
   {
     removeFromCart,
     getCartData,
+    updateItemQuantity,
   }
 )(CartPage);

@@ -191,7 +191,7 @@ class Header extends Component {
               const isActive = activeMenuItem === item.link;
               const linkProps = {
                 className: cx("nav-link", {
-                  "position-relative": item.link === "cart",
+                  "position-relative": item.link === "/cart",
                   "dropdown-toggle": hasDropdown,
                 }),
                 to: item.link,
@@ -222,7 +222,7 @@ class Header extends Component {
                         color={item.iconColor}
                       />
                     )}
-                    {item.link === "cart" && (
+                    {item.link === "/cart" && (
                       <span className="cart-count">{cartCount}</span>
                     )}
                   </Link>
