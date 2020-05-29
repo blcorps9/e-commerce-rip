@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import _map from "lodash/map";
 
-import { saveNewAddress } from "./actions";
+import AddressForm from "../../components/AddressForm";
+
+import { saveNewAddress, updateAddress, deleteAddress } from "./actions";
 
 class DeliveryPage extends Component {
   constructor(props) {
@@ -9,6 +12,7 @@ class DeliveryPage extends Component {
 
     this.state = {
       showNewAddrForm: false,
+      showUpdateFormFor: null,
     };
   }
 
@@ -16,14 +20,35 @@ class DeliveryPage extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.setState((pS) => ({ showNewAddrForm: !pS.showNewAddrForm }));
+    this.setState((pS) => ({
+      showNewAddrForm: !pS.showNewAddrForm,
+      showUpdateFormFor: null,
+    }));
+  };
+
+  onClickUpdate = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const addrId = e.currentTarget.getAttribute("data-key");
+
+    this.setState({ showUpdateFormFor: addrId });
+  };
+
+  onClickDelete = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const addrId = e.currentTarget.getAttribute("data-key");
+
+    this.props.deleteAddress({ key: addrId });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const addrData = {};
+    const addrData = { key: this.state.showUpdateFormFor };
 
     for (let field of e.currentTarget) {
       if (field.type !== "submit") {
@@ -31,13 +56,15 @@ class DeliveryPage extends Component {
       }
     }
 
-    this.setState({ showNewAddrForm: false }, () => {
-      this.props.saveNewAddress(addrData);
+    this.setState({ showNewAddrForm: false, showUpdateFormFor: null }, () => {
+      addrData.key
+        ? this.props.updateAddress(addrData)
+        : this.props.saveNewAddress(addrData);
     });
   };
 
   render() {
-    const { showNewAddrForm } = this.state;
+    const { showNewAddrForm, showUpdateFormFor } = this.state;
     const { myAddresses } = this.props;
 
     return (
@@ -49,86 +76,35 @@ class DeliveryPage extends Component {
               {myAddresses.map((addr) => (
                 <li className="list-group-item" key={addr.key}>
                   {`${addr.inputAddressName}, ${addr.inputAddressLine1}, ${addr.inputCity}, ${addr.inputPostalCode}`}
+
+                  <br />
+
+                  {showUpdateFormFor === addr.key ? (
+                    <AddressForm onSubmit={this.onSubmit} address={addr} />
+                  ) : (
+                    <>
+                      <button
+                        className="btn btn-secondary float-right"
+                        onClick={this.onClickDelete}
+                        data-key={addr.key}
+                        disabled={addr.gridCheckDefault === "on"}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="btn btn-primary float-right mr-1"
+                        onClick={this.onClickUpdate}
+                        data-key={addr.key}
+                      >
+                        Update
+                      </button>
+                    </>
+                  )}
                 </li>
               ))}
               {showNewAddrForm ? (
                 <li className="list-group-item" key={myAddresses.length + 1}>
-                  <form onSubmit={this.onSubmit}>
-                    <div className="form-row">
-                      <div className="form-group col-12">
-                        <label htmlFor="inputAddressName">Address name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="inputAddressName"
-                          placeholder="vacation home"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="inputAddressLine1">Address Line 1</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputAddressLine1"
-                        placeholder="1234 Main St"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="inputAddressLine2">Address Line 2</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputAddressLine2"
-                        placeholder="Apartment, studio, or floor"
-                      />
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <label htmlFor="inputCity">City</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="inputCity"
-                        />
-                      </div>
-                      <div className="form-group col-md-4">
-                        <label htmlFor="inputState">State</label>
-                        <select id="inputState" className="form-control">
-                          <option>Choose...</option>
-                          <option>...</option>
-                        </select>
-                      </div>
-                      <div className="form-group col-md-2">
-                        <label htmlFor="inputPostalCode">Postal Code</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="inputPostalCode"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id="gridCheckDefault"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="gridCheckDefault"
-                        >
-                          Save as default
-                        </label>
-                      </div>
-                    </div>
-                    <div className="form-group d-flex align-items-end">
-                      <button type="submit" className="btn btn-primary">
-                        Save
-                      </button>
-                    </div>
-                  </form>
+                  <AddressForm onSubmit={this.onSubmit} isNew />
                 </li>
               ) : (
                 <li className="list-group-item actions d-flex align-items-end">
@@ -150,4 +126,6 @@ class DeliveryPage extends Component {
 
 export default connect((state) => ({ myAddresses: state.myAddresses.data }), {
   saveNewAddress,
+  updateAddress,
+  deleteAddress,
 })(DeliveryPage);

@@ -327,3 +327,43 @@ export function saveNewAddress(address) {
     }, delay);
   });
 }
+
+export function updateAddress(address) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
+
+      myAddress.map((oldAddr) => {
+        if (oldAddr.key === address.key) {
+          Object.assign(oldAddr, address);
+        }
+      });
+
+      localStorage.setItem("myAddress", JSON.stringify(myAddress));
+
+      return resolve({
+        status: 200,
+        data: myAddress,
+      });
+    }, delay);
+  });
+}
+
+export function deleteAddress(address) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
+
+      const newAddrs = myAddress.filter((oldAddr) => {
+        return oldAddr.key !== address.key;
+      });
+
+      localStorage.setItem("myAddress", JSON.stringify(newAddrs));
+
+      return resolve({
+        status: 200,
+        data: newAddrs,
+      });
+    }, delay);
+  });
+}
