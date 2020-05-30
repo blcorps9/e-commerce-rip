@@ -6,6 +6,7 @@ import { inventory, spinner, cart, favList, common } from "./reducer";
 import pdp from "../pages/PDP/reducer";
 import cartData from "../pages/Cart/reducer";
 import myAddresses from "../pages/DeliveryPage/reducer";
+import myCards from "../pages/PaymentPage/reducer";
 
 export default (history) =>
   combineReducers({
@@ -18,5 +19,6 @@ export default (history) =>
     pdp,
     cartData,
     myAddresses,
+    myCards,
     router: connectRouter(history),
   });

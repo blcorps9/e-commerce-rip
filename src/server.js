@@ -25,6 +25,11 @@ export function getInitialState() {
       data: JSON.parse(localStorage.getItem("myAddress") || "[]"),
       err: null,
     },
+    myCards: {
+      inProgress: false,
+      data: JSON.parse(localStorage.getItem("myCards") || "[]"),
+      err: null,
+    },
   };
 }
 
@@ -312,9 +317,16 @@ export function updateItemQuantity({ sku, updatedQty }) {
 export function saveNewAddress(address) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
+      let myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
 
       address.key = uuidv4();
+
+      if (address.gridCheckDefault) {
+        myAddress = myAddress.map((addr) => ({
+          ...addr,
+          gridCheckDefault: false,
+        }));
+      }
 
       myAddress.push(address);
 
@@ -331,12 +343,19 @@ export function saveNewAddress(address) {
 export function updateAddress(address) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
+      let myAddress = JSON.parse(localStorage.getItem("myAddress") || "[]");
 
-      myAddress.map((oldAddr) => {
+      myAddress = myAddress.map((oldAddr) => {
         if (oldAddr.key === address.key) {
-          Object.assign(oldAddr, address);
+          return Object.assign(oldAddr, address);
         }
+
+        return {
+          ...oldAddr,
+          gridCheckDefault: address.gridCheckDefault
+            ? false
+            : oldAddr.gridCheckDefault,
+        };
       });
 
       localStorage.setItem("myAddress", JSON.stringify(myAddress));
@@ -363,6 +382,69 @@ export function deleteAddress(address) {
       return resolve({
         status: 200,
         data: newAddrs,
+      });
+    }, delay);
+  });
+}
+
+export function saveNewCard(card) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myCards = JSON.parse(localStorage.getItem("myCards") || "[]");
+
+      card.key = uuidv4();
+
+      // TODO: Keep one item as default at any point of time
+
+      myCards.push(card);
+
+      localStorage.setItem("myCards", JSON.stringify(myCards));
+
+      return resolve({
+        status: 200,
+        data: myCards,
+      });
+    }, delay);
+  });
+}
+
+export function updateCard(card) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myCards = JSON.parse(localStorage.getItem("myCards") || "[]");
+
+      // TODO: Keep one item as default at any point of time
+
+      myCards.map((oldCard) => {
+        if (oldCard.key === card.key) {
+          Object.assign(oldCard, card);
+        }
+      });
+
+      localStorage.setItem("myCards", JSON.stringify(myCards));
+
+      return resolve({
+        status: 200,
+        data: myCards,
+      });
+    }, delay);
+  });
+}
+
+export function deleteCard(card) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myCards = JSON.parse(localStorage.getItem("myCards") || "[]");
+
+      const newCards = myCards.filter((oldCard) => {
+        return oldCard.key !== card.key;
+      });
+
+      localStorage.setItem("myCards", JSON.stringify(newCards));
+
+      return resolve({
+        status: 200,
+        data: newCards,
       });
     }, delay);
   });

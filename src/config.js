@@ -279,6 +279,10 @@ export const BREADCRUMBS = {
     { label: "Home", link: "/", key: uuidv4() },
     { label: "Delivery Page", link: "/delivery", key: uuidv4() },
   ],
+  payment: [
+    { label: "Home", link: "/", key: uuidv4() },
+    { label: "Payment Page", link: "/payment", key: uuidv4() },
+  ],
 };
 
 export const ITEM_FAV_COLOR_DEFAULT = "#000";
@@ -290,3 +294,5 @@ export const SORT_ORDERS = [
   { label: "Price Low-High", prop: "salePrice", order: "asc", key: uuidv4() },
   { label: "Price High-Low", prop: "salePrice", order: "desc", key: uuidv4() },
 ];
+
+export const CC_EXPIRY_YEARS = 10;

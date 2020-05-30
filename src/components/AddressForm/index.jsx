@@ -90,7 +90,7 @@ export default function AddressForm({ isNew, address, onSubmit }) {
             className="form-check-input"
             type="checkbox"
             id="gridCheckDefault"
-            defaultChecked={isNew ? false : address.gridCheckDefault === "on"}
+            defaultChecked={isNew ? false : address.gridCheckDefault}
           />
           <label className="form-check-label" htmlFor="gridCheckDefault">
             Save as default

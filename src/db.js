@@ -1359,3 +1359,18 @@ export const INDIAN_STATES_AND_UTS = {
   UK: "Uttarakhand",
   WB: "West Bengal",
 };
+
+export const LIST_OF_MONTHS = [
+  { short: "Jan", long: "Jan" },
+  { short: "Feb", long: "Jan" },
+  { short: "Mar", long: "Jan" },
+  { short: "Apr", long: "Jan" },
+  { short: "May", long: "Jan" },
+  { short: "Jun", long: "Jan" },
+  { short: "Jul", long: "Jan" },
+  { short: "Aug", long: "Jan" },
+  { short: "Sept", long: "Jan" },
+  { short: "Oct", long: "Jan" },
+  { short: "Nov", long: "Jan" },
+  { short: "Dec", long: "Jan" },
+];

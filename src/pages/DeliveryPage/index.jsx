@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import _map from "lodash/map";
 
 import AddressForm from "../../components/AddressForm";
@@ -52,7 +53,8 @@ class DeliveryPage extends Component {
 
     for (let field of e.currentTarget) {
       if (field.type !== "submit") {
-        addrData[field.id] = field.value;
+        addrData[field.id] =
+          field.type === "checkbox" ? field.checked : field.value;
       }
     }
 
@@ -66,7 +68,17 @@ class DeliveryPage extends Component {
   render() {
     const { showNewAddrForm, showUpdateFormFor } = this.state;
     const { myAddresses } = this.props;
+    const continueBtnProps = {
+      className: "btn btn-primary",
+      to: "/payment",
+    };
 
+    if (myAddresses.length === 0) {
+      continueBtnProps.onClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      };
+    }
     return (
       <div className="cart-page row mb-4">
         <div className="col-10 offset-1">
@@ -87,7 +99,7 @@ class DeliveryPage extends Component {
                         className="btn btn-secondary float-right"
                         onClick={this.onClickDelete}
                         data-key={addr.key}
-                        disabled={addr.gridCheckDefault === "on"}
+                        disabled={addr.gridCheckDefault ? "disabled" : null}
                       >
                         Delete
                       </button>
@@ -118,6 +130,9 @@ class DeliveryPage extends Component {
               )}
             </ul>
           </div>
+        </div>
+        <div className="col-1 offset-10 mt-2">
+          <Link {...continueBtnProps}>Continue</Link>
         </div>
       </div>
     );
