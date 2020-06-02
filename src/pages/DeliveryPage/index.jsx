@@ -5,7 +5,12 @@ import _map from "lodash/map";
 
 import AddressForm from "../../components/AddressForm";
 
-import { saveNewAddress, updateAddress, deleteAddress } from "./actions";
+import {
+  saveNewAddress,
+  updateAddress,
+  deleteAddress,
+  onSelectDelveryAddress,
+} from "./actions";
 
 class DeliveryPage extends Component {
   constructor(props) {
@@ -14,6 +19,7 @@ class DeliveryPage extends Component {
     this.state = {
       showNewAddrForm: false,
       showUpdateFormFor: null,
+      selectedDelveryAddress: null,
     };
   }
 
@@ -65,8 +71,23 @@ class DeliveryPage extends Component {
     });
   };
 
+  onSelectDelveryAddress = (e) => {
+    // e.preventDefault();
+    e.stopPropagation();
+
+    const addrId = e.currentTarget.id;
+
+    this.setState({ selectedDelveryAddress: addrId }, () => {
+      this.props.onSelectDelveryAddress({ key: addrId });
+    });
+  };
+
   render() {
-    const { showNewAddrForm, showUpdateFormFor } = this.state;
+    const {
+      showNewAddrForm,
+      showUpdateFormFor,
+      selectedDelveryAddress,
+    } = this.state;
     const { myAddresses } = this.props;
     const continueBtnProps = {
       className: "btn btn-primary",
@@ -79,6 +100,7 @@ class DeliveryPage extends Component {
         e.stopPropagation();
       };
     }
+
     return (
       <div className="cart-page row mb-4">
         <div className="col-10 offset-1">
@@ -87,29 +109,46 @@ class DeliveryPage extends Component {
             <ul className="list-group list-group-flush">
               {myAddresses.map((addr) => (
                 <li className="list-group-item" key={addr.key}>
-                  {`${addr.inputAddressName}, ${addr.inputAddressLine1}, ${addr.inputCity}, ${addr.inputPostalCode}`}
+                  <div className="input-group">
+                    <div className="input-group-text">
+                      <input
+                        type="checkbox"
+                        id={addr.key}
+                        onChange={this.onSelectDelveryAddress}
+                        checked={selectedDelveryAddress === addr.key}
+                      />
+                    </div>
+                    <label
+                      htmlFor={addr.key}
+                      style={{ width: "calc(100% - 40px)" }}
+                    >
+                      {`${addr.inputAddressName}, ${addr.inputAddressLine1}, ${addr.inputCity}, ${addr.inputPostalCode}`}
+                      {showUpdateFormFor !== addr.key && (
+                        <>
+                          <button
+                            className="btn btn-secondary float-right"
+                            onClick={this.onClickDelete}
+                            data-key={addr.key}
+                            disabled={addr.gridCheckDefault ? "disabled" : null}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="btn btn-primary float-right mr-1"
+                            onClick={this.onClickUpdate}
+                            data-key={addr.key}
+                          >
+                            Update
+                          </button>
+                        </>
+                      )}
+                    </label>
+                  </div>
 
-                  <br />
-
-                  {showUpdateFormFor === addr.key ? (
-                    <AddressForm onSubmit={this.onSubmit} address={addr} />
-                  ) : (
+                  {showUpdateFormFor === addr.key && (
                     <>
-                      <button
-                        className="btn btn-secondary float-right"
-                        onClick={this.onClickDelete}
-                        data-key={addr.key}
-                        disabled={addr.gridCheckDefault ? "disabled" : null}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="btn btn-primary float-right mr-1"
-                        onClick={this.onClickUpdate}
-                        data-key={addr.key}
-                      >
-                        Update
-                      </button>
+                      <br />
+                      <AddressForm onSubmit={this.onSubmit} address={addr} />
                     </>
                   )}
                 </li>
@@ -132,7 +171,11 @@ class DeliveryPage extends Component {
           </div>
         </div>
         <div className="col-1 offset-10 mt-2">
-          <Link {...continueBtnProps}>Continue</Link>
+          {selectedDelveryAddress ? (
+            <Link {...continueBtnProps}>Continue</Link>
+          ) : (
+            <span className="disabled btn btn-secondary">Continue</span>
+          )}
         </div>
       </div>
     );
@@ -143,4 +186,5 @@ export default connect((state) => ({ myAddresses: state.myAddresses.data }), {
   saveNewAddress,
   updateAddress,
   deleteAddress,
+  onSelectDelveryAddress,
 })(DeliveryPage);

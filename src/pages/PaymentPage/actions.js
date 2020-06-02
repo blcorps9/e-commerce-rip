@@ -2,6 +2,7 @@ import {
   saveNewCard as _saveNewCard,
   updateCard as _updateCard,
   deleteCard as _deleteCard,
+  setPaymentMethod as _setPaymentMethod,
 } from "../../server";
 
 export const SAVE_NEW_CARD_REQUEST = "SAVE_NEW_CARD_REQUEST";
@@ -15,6 +16,10 @@ export const UPDATE_CARD_FAILURE = "UPDATE_CARD_FAILURE";
 export const DELETE_CARD_REQUEST = "DELETE_CARD_REQUEST";
 export const DELETE_CARD_SUCCESS = "DELETE_CARD_SUCCESS";
 export const DELETE_CARD_FAILURE = "DELETE_CARD_FAILURE";
+
+export const SELECT_PAYMENT_METHOD_REQUEST = "SELECT_PAYMENT_METHOD_REQUEST";
+export const SELECT_PAYMENT_METHOD_SUCCESS = "SELECT_PAYMENT_METHOD_SUCCESS";
+export const SELECT_PAYMENT_METHOD_FAILURE = "SELECT_PAYMENT_METHOD_FAILURE";
 
 export const saveNewCard = (card) => {
   return (dispatch) => {
@@ -54,6 +59,19 @@ export const deleteCard = (card) => {
       })
       .catch((err) => {
         dispatch({ type: DELETE_CARD_FAILURE, payload: resp.error });
+      });
+  };
+};
+export const setPaymentMethod = (card) => {
+  return (dispatch) => {
+    dispatch({ type: SELECT_PAYMENT_METHOD_REQUEST });
+
+    return _setPaymentMethod(card)
+      .then((resp) => {
+        dispatch({ type: SELECT_PAYMENT_METHOD_SUCCESS, payload: resp.data });
+      })
+      .catch((err) => {
+        dispatch({ type: SELECT_PAYMENT_METHOD_FAILURE, payload: resp.error });
       });
   };
 };

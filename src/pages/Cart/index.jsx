@@ -14,6 +14,8 @@ import AddToFavList from "../../components/AddToFavList";
 import { removeFromCart } from "../../store/actions";
 import { getCartData, updateItemQuantity } from "./actions";
 
+import { formatCurrency } from "../../utils";
+
 class CartPage extends Component {
   constructor(props) {
     super(props);
@@ -80,6 +82,12 @@ class CartPage extends Component {
         </div>
       );
     }
+
+    const total = cartData.reduce((acc, current) => {
+      acc += current.salePrice * current.quantity;
+
+      return acc;
+    }, 0.0);
 
     return (
       <div className="cart-page row mb-4">
@@ -169,6 +177,12 @@ class CartPage extends Component {
                   </div>
                 );
               })}
+            </div>
+          </div>
+          <div className="card mt-2">
+            <div className="card-header d-flex justify-content-between">
+              <span>Cart Total:</span>
+              <span>{formatCurrency(total)}</span>
             </div>
           </div>
         </div>

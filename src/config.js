@@ -283,6 +283,10 @@ export const BREADCRUMBS = {
     { label: "Home", link: "/", key: uuidv4() },
     { label: "Payment Page", link: "/payment", key: uuidv4() },
   ],
+  confirmation: [
+    { label: "Home", link: "/", key: uuidv4() },
+    { label: "Order Confirmation Page", link: "/confirmation", key: uuidv4() },
+  ],
 };
 
 export const ITEM_FAV_COLOR_DEFAULT = "#000";

@@ -24,9 +24,11 @@ export function getInitialState() {
       inProgress: false,
       data: JSON.parse(localStorage.getItem("myAddress") || "[]"),
       err: null,
+      deliveryAddress: null,
     },
     myCards: {
       inProgress: false,
+      paymentMethod: null,
       data: JSON.parse(localStorage.getItem("myCards") || "[]"),
       err: null,
     },
@@ -306,6 +308,8 @@ export function updateItemQuantity({ sku, updatedQty }) {
         };
       });
 
+      localStorage.setItem("myCart", JSON.stringify(cartData));
+
       return resolve({
         status: 200,
         data: cartData,
@@ -445,6 +449,30 @@ export function deleteCard(card) {
       return resolve({
         status: 200,
         data: newCards,
+      });
+    }, delay);
+  });
+}
+export function onSelectDelveryAddress(address) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      localStorage.setItem("deliveryAddress", JSON.stringify(address));
+
+      return resolve({
+        status: 200,
+        data: address,
+      });
+    }, delay);
+  });
+}
+export function setPaymentMethod(card) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      localStorage.setItem("paymentMethod", JSON.stringify(card));
+
+      return resolve({
+        status: 200,
+        data: card,
       });
     }, delay);
   });

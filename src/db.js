@@ -1374,3 +1374,13 @@ export const LIST_OF_MONTHS = [
   { short: "Nov", long: "Jan" },
   { short: "Dec", long: "Jan" },
 ];
+
+export const WEEK_DAYS_SHORT = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
+];
