@@ -8,10 +8,14 @@ import {
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
+  SELECT_PAYMENT_METHOD_REQUEST,
+  SELECT_PAYMENT_METHOD_SUCCESS,
+  SELECT_PAYMENT_METHOD_FAILURE,
 } from "./actions";
 
 const initAddrState = {
   inProgress: false,
+  paymentMethod: null,
   data: [],
   err: null,
 };
@@ -55,6 +59,34 @@ export default function myCards(state = initAddrState, action) {
         data: action.payload,
       };
     case DELETE_CARD_FAILURE:
+      return {
+        ...state,
+        inProgress: false,
+        err: action.payload,
+      };
+    case DELETE_CARD_REQUEST:
+      return { ...state, inProgress: true };
+    case DELETE_CARD_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        data: action.payload,
+      };
+    case DELETE_CARD_FAILURE:
+      return {
+        ...state,
+        inProgress: false,
+        err: action.payload,
+      };
+    case SELECT_PAYMENT_METHOD_REQUEST:
+      return { ...state, inProgress: true };
+    case SELECT_PAYMENT_METHOD_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        paymentMethod: action.payload,
+      };
+    case SELECT_PAYMENT_METHOD_FAILURE:
       return {
         ...state,
         inProgress: false,

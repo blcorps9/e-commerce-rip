@@ -7,13 +7,23 @@ import _isEmpty from "lodash/isEmpty";
 
 import CardForm from "../../components/CardForm";
 
-import { saveNewCard, updateCard, deleteCard } from "./actions";
+import {
+  saveNewCard,
+  updateCard,
+  deleteCard,
+  setPaymentMethod,
+} from "./actions";
 
 import { isValidCardNumber } from "../../utils";
+
+// Hooks
+// https://dmitripavlutin.com/react-usestate-hook-guide/
 
 function PaymentPage(props) {
   const [showAddCardForm, setShowAddCardForm] = useState(false);
   const [updateCardForm, setUpdateCardForm] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+
   const [formError, setFormError] = useState({
     inputCardHolderName: "",
     inputCardNumber: "",
@@ -37,6 +47,16 @@ function PaymentPage(props) {
 
     setShowAddCardForm(true);
     setUpdateCardForm(null);
+  };
+
+  const onSelectPaymentMethod = (e) => {
+    // e.preventDefault();
+    e.stopPropagation();
+
+    const cardId = e.currentTarget.id;
+
+    setSelectedPayment(cardId);
+    props.setPaymentMethod({ key: cardId });
   };
 
   const onSubmit = (e) => {
@@ -115,35 +135,49 @@ function PaymentPage(props) {
           <ul className="list-group list-group-flush">
             {myCards.map((card) => (
               <li className="list-group-item" key={card.key}>
-                {`${
-                  card.inputCardHolderName
-                }, XXX*******XX${card.inputCardNumber.substr(-4)}`}
-                <br />
-
-                {updateCardForm === card.key ? (
+                <div className="input-group">
+                  <div className="input-group-text">
+                    <input
+                      type="checkbox"
+                      id={card.key}
+                      onChange={onSelectPaymentMethod}
+                      checked={selectedPayment === card.key}
+                    />
+                  </div>
+                  <label
+                    htmlFor={card.key}
+                    style={{ width: "calc(100% - 40px)" }}
+                  >
+                    {`${
+                      card.inputCardHolderName
+                    }, XXX*******XX${card.inputCardNumber.substr(-4)}`}
+                    {updateCardForm !== card.key && (
+                      <>
+                        <button
+                          className="btn btn-secondary float-right"
+                          onClick={onClickDelete}
+                          data-key={card.key}
+                          disabled={card.inputSaveCard ? "disabled" : null}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="btn btn-primary float-right mr-1"
+                          onClick={onClickUpdate}
+                          data-key={card.key}
+                        >
+                          Update
+                        </button>
+                      </>
+                    )}
+                  </label>
+                </div>
+                {updateCardForm === card.key && (
                   <CardForm
                     onSubmit={onSubmit}
                     card={card}
                     formError={formError}
                   />
-                ) : (
-                  <>
-                    <button
-                      className="btn btn-secondary float-right"
-                      onClick={onClickDelete}
-                      data-key={card.key}
-                      disabled={card.inputSaveCard ? "disabled" : null}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="btn btn-primary float-right mr-1"
-                      onClick={onClickUpdate}
-                      data-key={card.key}
-                    >
-                      Update
-                    </button>
-                  </>
                 )}
               </li>
             ))}
@@ -161,10 +195,14 @@ function PaymentPage(props) {
           </ul>
         </div>
       </div>
-      <div className="col-1 offset-10 mt-2">
-        <Link className="btn btn-primary" to="/">
-          Pay
-        </Link>
+      <div className="col-2 offset-10 mt-2">
+        {selectedPayment ? (
+          <Link className="btn btn-primary" to="/confirmation">
+            Pay Now
+          </Link>
+        ) : (
+          <span className="btn btn-secondary disabled">Pay Now</span>
+        )}
       </div>
     </div>
   );
@@ -174,4 +212,5 @@ export default connect((state) => ({ myCards: state.myCards.data }), {
   saveNewCard,
   updateCard,
   deleteCard,
+  setPaymentMethod,
 })(PaymentPage);

@@ -2,6 +2,7 @@ import {
   saveNewAddress as _saveNewAddress,
   updateAddress as _updateAddress,
   deleteAddress as _deleteAddress,
+  onSelectDelveryAddress as _onSelectDelveryAddress,
 } from "../../server";
 
 export const SAVE_NEW_ADDRESS_REQUEST = "SAVE_NEW_ADDRESS_REQUEST";
@@ -15,6 +16,13 @@ export const UPDATE_ADDRESS_FAILURE = "UPDATE_ADDRESS_FAILURE";
 export const DELETE_ADDRESS_REQUEST = "DELETE_ADDRESS_REQUEST";
 export const DELETE_ADDRESS_SUCCESS = "DELETE_ADDRESS_SUCCESS";
 export const DELETE_ADDRESS_FAILURE = "DELETE_ADDRESS_FAILURE";
+
+export const SELECT_DELIVERY_ADDRESS_REQUEST =
+  "SELECT_DELIVERY_ADDRESS_REQUEST";
+export const SELECT_DELIVERY_ADDRESS_SUCCESS =
+  "SELECT_DELIVERY_ADDRESS_SUCCESS";
+export const SELECT_DELIVERY_ADDRESS_FAILURE =
+  "SELECT_DELIVERY_ADDRESS_FAILURE";
 
 export const saveNewAddress = (address) => {
   return (dispatch) => {
@@ -54,6 +62,23 @@ export const deleteAddress = (address) => {
       })
       .catch((err) => {
         dispatch({ type: DELETE_ADDRESS_FAILURE, payload: resp.error });
+      });
+  };
+};
+
+export const onSelectDelveryAddress = (address) => {
+  return (dispatch) => {
+    dispatch({ type: SELECT_DELIVERY_ADDRESS_REQUEST });
+
+    return _onSelectDelveryAddress(address)
+      .then((resp) => {
+        dispatch({ type: SELECT_DELIVERY_ADDRESS_SUCCESS, payload: resp.data });
+      })
+      .catch((err) => {
+        dispatch({
+          type: SELECT_DELIVERY_ADDRESS_FAILURE,
+          payload: resp.error,
+        });
       });
   };
 };

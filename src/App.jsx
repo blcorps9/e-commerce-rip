@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Home from "./pages/Home";
@@ -12,6 +12,7 @@ import PDP from "./pages/PDP";
 import CartPage from "./pages/Cart";
 import DeliveryPage from "./pages/DeliveryPage";
 import PaymentPage from "./pages/PaymentPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -74,6 +75,7 @@ class App extends Component {
               "/cart",
               "/delivery",
               "/payment",
+              "/confirmation",
               "/",
             ]}
           >
@@ -93,6 +95,15 @@ class App extends Component {
                 </Route>
                 <Route path="/payment">
                   <PaymentPage />
+                </Route>
+                <Route path="/confirmation">
+                  {(props) => {
+                    if (props.history.action === "POP") {
+                      return <Redirect to="/cart" />;
+                    }
+
+                    return <ConfirmationPage />;
+                  }}
                 </Route>
                 <Route path="/aboutUs">
                   <AboutUs />
