@@ -13,6 +13,7 @@ import CartPage from "./pages/Cart";
 import DeliveryPage from "./pages/DeliveryPage";
 import PaymentPage from "./pages/PaymentPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
+import OrderHistoryPage from "./pages/OrderHistory";
 
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -76,6 +77,7 @@ class App extends Component {
               "/delivery",
               "/payment",
               "/confirmation",
+              "/user/orders",
               "/",
             ]}
           >
@@ -96,11 +98,14 @@ class App extends Component {
                 <Route path="/payment">
                   <PaymentPage />
                 </Route>
+                <Route path="/user/orders">
+                  <OrderHistoryPage />
+                </Route>
                 <Route path="/confirmation">
                   {(props) => {
-                    if (props.history.action === "POP") {
-                      return <Redirect to="/cart" />;
-                    }
+                    // if (props.history.action === "POP") {
+                    //   return <Redirect to="/cart" />;
+                    // }
 
                     return <ConfirmationPage />;
                   }}

@@ -32,7 +32,7 @@ class Header extends Component {
       query: "",
       catDropdown: "",
       activeMenuItem: "",
-      isLoggedIn: false,
+      isLoggedIn: true, // TODO: Make it dynamic by using session apis
     };
 
     this.fetchProductsDebounced = _debounce(

@@ -11,71 +11,14 @@ import Colors from "../../components/Colors";
 import Prices from "../../components/Prices";
 import AddToFavList from "../../components/AddToFavList";
 
-import { WEEK_DAYS_SHORT, LIST_OF_MONTHS } from "../../db";
-
 import { formatCurrency } from "../../utils";
 
-function formatDateToReadble(d) {
-  return `${WEEK_DAYS_SHORT[d.getDay()]} ${
-    LIST_OF_MONTHS[d.getDay()].short
-  } ${d.getDate()}, ${d.getFullYear()}`;
-}
-
-// didMount, didUpdate,
-//  useEffect
-function ConfirmationPage(props) {
+function OrderHistoryPage(props) {
   const { cartData, deliveryAddress, paymentMethod, cards, addresses } = props;
   const itemCount = cartData.length;
-  const date = new Date();
-  const fromDate = new Date(new Date().setDate(date.getDate() + 2));
-  const formDateReadable = formatDateToReadble(fromDate);
-  const toDate = new Date(new Date().setDate(date.getDate() + 5));
-  const toDateReadable = formatDateToReadble(toDate);
 
   const selectedCard = cards.find((c) => c.key === paymentMethod);
   const selectedAddress = addresses.find((a) => a.key === deliveryAddress);
-
-  const [count, setCount] = React.useState(0);
-  const [count1, setCount1] = React.useState(0);
-
-  //                              mounting - updating - unmounting --> Render a/b - 1st ---nth
-  // cons { this.hibernate = new Hibernate(); // chat }
-  // componentDidMount() {}         y           n           n            a            1st -
-  // componentDidUpdate() {}        n           y           n            a            nth
-  // componentWillUnmount() {}     n           n           y            a            remove 1s
-
-  // When second param is passed as an *Empty Array []* - it works like `componentDidMount`
-  // When you don't pass second param it works as `componentDidUpdate` -
-  React.useEffect(() => {
-    console.log("React.useEffect =--1-->Every Render ");
-
-    // componentWillUnmount
-    return () => console.log("React.useEffect =----> On Unmount ");
-  });
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--2-->First Render ");
-  }, []);
-  // state/props - componentDidMount - undefined
-  // cache => [] === [] - newArr
-  // cache => undefined !== []
-  // cache => [] !== []
-
-  // setCount = Y, setCount1 = N
-  React.useEffect(() => {
-    console.log("React.useEffect =--3--> When count changes ");
-  }, [count]); // dependency
-  // cache => [1] !== [2]
-  // setCount = Y, setCount1 = N
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--4--> When count1 changes ");
-  }, [count1]);
-  // cache => [1] !== [2]
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--5--> When count/count1 changes ");
-  }, [count, count1]);
 
   let total = 0;
   for (let i = 0; i < itemCount; i++) {
@@ -86,19 +29,11 @@ function ConfirmationPage(props) {
     <div className="cart-page row mb-4">
       <div className="col-10 offset-1">
         <div className="card">
-          <div className="card-header">Order Confirmation</div>
+          <div className="card-header">Order History</div>
           <ul
             className="list-group list-group-flush"
             style={{ listStyle: "none" }}
           >
-            <li className="list-group-item py-4 mx-auto">
-              <span className="rounded-pill border border-primary py-3 px-2 bg-info">
-                Your order placed successfully. All your {itemCount} items will
-                be delivered to <span className="f4">{formDateReadable}</span>{" "}
-                address on or before{" "}
-                <span className="f4">{toDateReadable}</span> date.
-              </span>
-            </li>
             <li>
               <div className="card">
                 <div className="card-body">
@@ -140,12 +75,6 @@ function ConfirmationPage(props) {
                             </div>
                             <div className="col-5 col-sm-5 col-md-2 col-lg-2 col-xl-2">
                               <AddToFavList skuId={item.sku} displayInline />
-                              <button onClick={() => setCount(count + 1)}>
-                                Count {count}
-                              </button>
-                              <button onClick={() => setCount1(count1 + 1)}>
-                                Count1 {count1}
-                              </button>
                             </div>
                           </div>
                         </li>
@@ -204,4 +133,4 @@ export default connect((state) => ({
   addresses: _get(state, "myAddresses.data", []),
   paymentMethod: _get(state, "myCards.paymentMethod.key"),
   deliveryAddress: _get(state, "myAddresses.deliveryAddress.key"),
-}))(ConfirmationPage);
+}))(OrderHistoryPage);

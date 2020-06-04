@@ -24,12 +24,17 @@ export function getInitialState() {
       inProgress: false,
       data: JSON.parse(localStorage.getItem("myAddress") || "[]"),
       err: null,
-      deliveryAddress: null,
+      deliveryAddress: JSON.parse(localStorage.getItem("paymentMethod") || {}),
     },
     myCards: {
       inProgress: false,
-      paymentMethod: null,
+      paymentMethod: JSON.parse(localStorage.getItem("deliveryAddress") || {}),
       data: JSON.parse(localStorage.getItem("myCards") || "[]"),
+      err: null,
+    },
+    cartData: {
+      inProgress: false,
+      data: JSON.parse(localStorage.getItem("cartData") || "[]"),
       err: null,
     },
   };
@@ -277,6 +282,8 @@ export function getCartData() {
           quantity: product.quantity,
         };
       });
+
+      localStorage.setItem("cartData", JSON.stringify(cartData));
 
       return resolve({
         status: 200,
