@@ -4,6 +4,7 @@ import {
   removeFromCart as _removeFromCart,
   addToFavList as _addToFavList,
   removeFromFavList as _removeFromFavList,
+  onPurchaseOrder as _onPurchaseOrder,
 } from "../server";
 
 import {
@@ -26,6 +27,9 @@ import {
   REMOVE_FROM_FAV_FAILURE,
   COMMON_SORT_ORDER_CHANGE,
   COMMON_PROD_FILTER_CHANGE,
+  ON_PURCHASE_ORDER_REQUEST,
+  ON_PURCHASE_ORDER_SUCCESS,
+  ON_PURCHASE_ORDER_FAILURE,
 } from "./actionTypes";
 
 export function getProducts(query) {
@@ -119,6 +123,24 @@ export const removeFromFavList = (product) => {
       })
       .catch((err) => {
         dispatch({ type: REMOVE_FROM_FAV_FAILURE, payload: err });
+      })
+      .then(() => {
+        dispatch({ type: HIDE_LOADER });
+      });
+  };
+};
+
+export const onPurchaseOrder = (order) => {
+  return (dispatch) => {
+    dispatch({ type: SHOW_LOADER });
+    dispatch({ type: ON_PURCHASE_ORDER_REQUEST });
+
+    return _onPurchaseOrder(order)
+      .then((resp) => {
+        dispatch({ type: ON_PURCHASE_ORDER_SUCCESS, payload: resp.data });
+      })
+      .catch((err) => {
+        dispatch({ type: ON_PURCHASE_ORDER_FAILURE, payload: err });
       })
       .then(() => {
         dispatch({ type: HIDE_LOADER });
