@@ -18,6 +18,9 @@ import {
   REMOVE_FROM_FAV_FAILURE,
   COMMON_SORT_ORDER_CHANGE,
   COMMON_PROD_FILTER_CHANGE,
+  ON_PURCHASE_ORDER_REQUEST,
+  ON_PURCHASE_ORDER_SUCCESS,
+  ON_PURCHASE_ORDER_FAILURE,
 } from "./actionTypes";
 
 const initialInventoryState = {
@@ -69,6 +72,8 @@ export function cart(state = initialCartState, action) {
       return { ...state, inProgress: false, data: action.payload };
     case REMOVE_FROM_CART_FAILURE:
       return { ...state, inProgress: false, err: action.payload };
+    case ON_PURCHASE_ORDER_SUCCESS:
+      return { ...state, inProgress: false, data: [] };
     default:
       return state;
   }
@@ -111,6 +116,24 @@ export function common(state = initialCommonState, action) {
         ...state,
         filterOpts: { ...state.filterOpts, ...action.payload },
       };
+    default:
+      return state;
+  }
+}
+
+const initialMyOrdersState = {
+  inProgress: false,
+  data: [],
+  err: null,
+};
+export function myOrders(state = initialMyOrdersState, action) {
+  switch (action.type) {
+    case ON_PURCHASE_ORDER_REQUEST:
+      return { ...state, inProgress: true };
+    case ON_PURCHASE_ORDER_SUCCESS:
+      return { ...state, inProgress: false, data: action.payload };
+    case ON_PURCHASE_ORDER_FAILURE:
+      return { ...state, inProgress: false, err: action.payload };
     default:
       return state;
   }

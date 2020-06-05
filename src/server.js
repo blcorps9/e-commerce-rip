@@ -24,17 +24,26 @@ export function getInitialState() {
       inProgress: false,
       data: JSON.parse(localStorage.getItem("myAddress") || "[]"),
       err: null,
-      deliveryAddress: JSON.parse(localStorage.getItem("paymentMethod") || {}),
+      deliveryAddress: JSON.parse(
+        localStorage.getItem("paymentMethod") || "{}"
+      ),
     },
     myCards: {
       inProgress: false,
-      paymentMethod: JSON.parse(localStorage.getItem("deliveryAddress") || {}),
+      paymentMethod: JSON.parse(
+        localStorage.getItem("deliveryAddress") || "{}"
+      ),
       data: JSON.parse(localStorage.getItem("myCards") || "[]"),
       err: null,
     },
     cartData: {
       inProgress: false,
       data: JSON.parse(localStorage.getItem("cartData") || "[]"),
+      err: null,
+    },
+    myOrders: {
+      inProgress: false,
+      data: JSON.parse(localStorage.getItem("myOrders") || "[]"),
       err: null,
     },
   };
@@ -472,6 +481,7 @@ export function onSelectDelveryAddress(address) {
     }, delay);
   });
 }
+
 export function setPaymentMethod(card) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -480,6 +490,25 @@ export function setPaymentMethod(card) {
       return resolve({
         status: 200,
         data: card,
+      });
+    }, delay);
+  });
+}
+
+export function onPurchaseOrder(order) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const myOrders = JSON.parse(localStorage.getItem("myOrders") || "[]");
+
+      myOrders.push(order);
+
+      localStorage.setItem("myOrders", JSON.stringify(myOrders));
+      localStorage.setItem("myCart", JSON.stringify([]));
+      localStorage.setItem("cartData", JSON.stringify([]));
+
+      return resolve({
+        status: 200,
+        data: myOrders,
       });
     }, delay);
   });

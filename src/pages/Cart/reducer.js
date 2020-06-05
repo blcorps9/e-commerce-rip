@@ -7,6 +7,8 @@ import {
   UPDATE_PROD_QUANTITY_FAILURE,
 } from "./actions";
 
+import { ON_PURCHASE_ORDER_SUCCESS } from "../../store/actionTypes";
+
 const initCartDataState = {
   inProgress: false,
   data: [],
@@ -41,6 +43,13 @@ export default function cartData(state = initCartDataState, action) {
         ...state,
         inProgress: false,
         error: action.payload,
+      };
+    // On purchase empty your cart
+    case ON_PURCHASE_ORDER_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        data: [],
       };
     default:
       return state;

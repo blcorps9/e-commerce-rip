@@ -1,6 +1,7 @@
 import React from "react";
 import _get from "lodash/get";
 import _range from "lodash/range";
+import _last from "lodash/last";
 import _sampleSize from "lodash/sampleSize";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -13,7 +14,9 @@ import AddToFavList from "../../components/AddToFavList";
 
 import { WEEK_DAYS_SHORT, LIST_OF_MONTHS } from "../../db";
 
-import { formatCurrency } from "../../utils";
+import { formatCurrency, uuidv4 } from "../../utils";
+
+import { onPurchaseOrder } from "../../store/actions";
 
 function formatDateToReadble(d) {
   return `${WEEK_DAYS_SHORT[d.getDay()]} ${
@@ -21,11 +24,18 @@ function formatDateToReadble(d) {
   } ${d.getDate()}, ${d.getFullYear()}`;
 }
 
-// didMount, didUpdate,
-//  useEffect
 function ConfirmationPage(props) {
-  const { cartData, deliveryAddress, paymentMethod, cards, addresses } = props;
-  const itemCount = cartData.length;
+  const {
+    myOrders,
+    cartData,
+    cards,
+    addresses,
+    paymentMethod,
+    deliveryAddress,
+  } = props;
+  const lastOrder = _last(myOrders) || {};
+  const { items } = lastOrder;
+  const itemCount = items.length;
   const date = new Date();
   const fromDate = new Date(new Date().setDate(date.getDate() + 2));
   const formDateReadable = formatDateToReadble(fromDate);
@@ -35,51 +45,22 @@ function ConfirmationPage(props) {
   const selectedCard = cards.find((c) => c.key === paymentMethod);
   const selectedAddress = addresses.find((a) => a.key === deliveryAddress);
 
-  const [count, setCount] = React.useState(0);
-  const [count1, setCount1] = React.useState(0);
-
-  //                              mounting - updating - unmounting --> Render a/b - 1st ---nth
-  // cons { this.hibernate = new Hibernate(); // chat }
-  // componentDidMount() {}         y           n           n            a            1st -
-  // componentDidUpdate() {}        n           y           n            a            nth
-  // componentWillUnmount() {}     n           n           y            a            remove 1s
-
-  // When second param is passed as an *Empty Array []* - it works like `componentDidMount`
-  // When you don't pass second param it works as `componentDidUpdate` -
   React.useEffect(() => {
-    console.log("React.useEffect =--1-->Every Render ");
-
-    // componentWillUnmount
-    return () => console.log("React.useEffect =----> On Unmount ");
-  });
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--2-->First Render ");
-  }, []);
-  // state/props - componentDidMount - undefined
-  // cache => [] === [] - newArr
-  // cache => undefined !== []
-  // cache => [] !== []
-
-  // setCount = Y, setCount1 = N
-  React.useEffect(() => {
-    console.log("React.useEffect =--3--> When count changes ");
-  }, [count]); // dependency
-  // cache => [1] !== [2]
-  // setCount = Y, setCount1 = N
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--4--> When count1 changes ");
-  }, [count1]);
-  // cache => [1] !== [2]
-
-  React.useEffect(() => {
-    console.log("React.useEffect =--5--> When count/count1 changes ");
-  }, [count, count1]);
+    if (selectedCard && selectedAddress) {
+      props.onPurchaseOrder({
+        orderId: uuidv4(),
+        purchasedOn: formatDateToReadble(date),
+        deliveredOn: toDateReadable,
+        items: cartData,
+        paymentMethod: selectedCard,
+        deliveryAddress: selectedAddress,
+      });
+    }
+  }, [selectedCard, selectedAddress]);
 
   let total = 0;
   for (let i = 0; i < itemCount; i++) {
-    total += cartData[i].salePrice * cartData[i].quantity;
+    total += items[i].salePrice * items[i].quantity;
   }
 
   return (
@@ -104,7 +85,7 @@ function ConfirmationPage(props) {
                 <div className="card-body">
                   <h6 className="card-title">Order Items</h6>
                   <ul className="list-group list-group-flush">
-                    {cartData.map((item, index) => {
+                    {items.map((item, index) => {
                       const color = _sampleSize(item.colors, 1)[0];
                       const { quantity, availableQuantity } = item;
 
@@ -140,12 +121,6 @@ function ConfirmationPage(props) {
                             </div>
                             <div className="col-5 col-sm-5 col-md-2 col-lg-2 col-xl-2">
                               <AddToFavList skuId={item.sku} displayInline />
-                              <button onClick={() => setCount(count + 1)}>
-                                Count {count}
-                              </button>
-                              <button onClick={() => setCount1(count1 + 1)}>
-                                Count1 {count1}
-                              </button>
                             </div>
                           </div>
                         </li>
@@ -198,10 +173,14 @@ function ConfirmationPage(props) {
   );
 }
 
-export default connect((state) => ({
-  cards: _get(state, "myCards.data", []),
-  cartData: _get(state, "cartData.data", []),
-  addresses: _get(state, "myAddresses.data", []),
-  paymentMethod: _get(state, "myCards.paymentMethod.key"),
-  deliveryAddress: _get(state, "myAddresses.deliveryAddress.key"),
-}))(ConfirmationPage);
+export default connect(
+  (state) => ({
+    cards: _get(state, "myCards.data", []),
+    cartData: _get(state, "cartData.data", []),
+    myOrders: _get(state, "myOrders.data", []),
+    addresses: _get(state, "myAddresses.data", []),
+    paymentMethod: _get(state, "myCards.paymentMethod.key"),
+    deliveryAddress: _get(state, "myAddresses.deliveryAddress.key"),
+  }),
+  { onPurchaseOrder }
+)(ConfirmationPage);
