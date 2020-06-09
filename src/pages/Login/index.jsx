@@ -30,6 +30,9 @@ class Login extends Component {
             toast.success(resp.data.message);
             this.props.push("/");
             this.props.hideLoader();
+          } else if (resp.status === 401) {
+            toast.error(resp.data.message);
+            this.props.hideLoader();
           }
         })
         .catch((err) => {

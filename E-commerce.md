@@ -32,6 +32,7 @@
 - [Browser Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 - [ExpressJS](https://expressjs.com/en/4x/api.html)
 - [Payment Option SVGs](https://www.flaticon.com/)
+- [Product Imgaes](https://source.unsplash.com/1600x900/?product)
 
 #### Course
 

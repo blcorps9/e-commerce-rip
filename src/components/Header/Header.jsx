@@ -101,7 +101,7 @@ class Header extends Component {
   };
 
   fetchProducts = (query) => {
-    this.props.getProducts(query);
+    this.props.getProducts({ search: query });
   };
 
   render() {
