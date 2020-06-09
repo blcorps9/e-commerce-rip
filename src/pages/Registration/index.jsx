@@ -48,7 +48,7 @@ class Registration extends Component {
     if (!_isEmpty(formData)) {
       this.props.showLoader();
       register(formData).then((resp) => {
-        if (resp.status === 200) {
+        if (resp.status === 201) {
           toast.success(resp.data.message);
           this.props.push("/");
           this.props.hideLoader();

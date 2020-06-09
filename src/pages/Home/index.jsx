@@ -17,11 +17,30 @@ import {
 
 import FilterCard from "../../components/FilterCard";
 import ProductCard from "../../components/ProductCard";
+import Carousel from "../../components/Carousel";
 
 import { getSorted } from "../../utils";
 
 import { SIZES, COLORS } from "../../db";
 import { SORT_ORDERS } from "../../config";
+
+const slides = [
+  {
+    image: "https://source.unsplash.com/1600x900/?product",
+    label: "Slide 1",
+    description: "Slide 1 description",
+  },
+  {
+    image: "https://source.unsplash.com/1080x800/?product",
+    label: "Slide 2",
+    description: "Slide 2 description",
+  },
+  {
+    image: "https://source.unsplash.com/1200x600/?product",
+    label: "Slide 3",
+    description: "Slide 3 description",
+  },
+];
 
 class Home extends Component {
   constructor(props) {
@@ -81,7 +100,9 @@ class Home extends Component {
       };
     }
 
-    return {};
+    return {
+      inventory: props.inventory,
+    };
   }
 
   componentDidMount() {
@@ -225,6 +246,9 @@ class Home extends Component {
             </div>
           </div>
           <div className="col-10">
+            <div className="row my-4">
+              <Carousel slides={slides} />
+            </div>
             <div className="row my-4">
               {inventory.map((product) => (
                 <Link
