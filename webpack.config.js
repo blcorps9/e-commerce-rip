@@ -2,6 +2,9 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 const cwd = process.cwd();
 const publicDir = path.resolve(cwd, "dist");
@@ -27,7 +30,7 @@ module.exports = {
         loader: "babel-loader",
         options: {
           presets: ["@babel/env", "@babel/react"],
-          plugins: ["@babel/plugin-proposal-class-properties"],
+          plugins: ["@babel/plugin-proposal-class-properties", "lodash"],
         },
       },
       {
@@ -79,6 +82,9 @@ module.exports = {
     port,
     historyApiFallback: true,
     hot: true,
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -96,5 +102,7 @@ module.exports = {
       template: path.resolve(srcDir, "index.html"),
       filename: "index.html",
     }),
+    new LodashModuleReplacementPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
 };

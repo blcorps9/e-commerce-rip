@@ -6,7 +6,7 @@ import thunk from "redux-thunk";
 
 import reducers from "./reducers";
 
-import { getInitialState } from "../server";
+// import { getInitialState } from "../server";
 
 export const history = createBrowserHistory();
 
@@ -19,10 +19,8 @@ if (process.env.NODE_ENV === `development`) {
   middlewares.push(createLogger());
 }
 
-// (reducer, middleware)
-// (reducer, initialState, middleware)
 export const store = createStore(
   reducers(history),
-  getInitialState(),
+  // getInitialState,
   applyMiddleware(...middlewares)
 );

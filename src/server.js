@@ -8,6 +8,36 @@ import { PRODUCTS_LIST } from "./db";
 
 const delay = 2;
 
+export function fetchService(url, opts = {}) {
+  const req = {
+    method: opts.method || "GET", // *GET, POST, PUT, DELETE, etc.
+    mode: "same-origin", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+  };
+
+  if (opts.method === "POST") {
+    req.body = JSON.stringify(opts.data);
+  }
+
+  if (opts.query) {
+    const params = _map(
+      Object.keys(opts.query),
+      (k) => `${k}=${encodeURIComponent(opts.query[k])}`
+    );
+
+    if (params.length) url += `?${params.join("&")}`;
+  }
+
+  return fetch(url, req).then((res) => res.json());
+}
+
 export function getInitialState() {
   return {
     cart: {
@@ -50,105 +80,20 @@ export function getInitialState() {
 }
 
 export function register(profile) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      profile.userId = uuidv4();
-
-      localStorage.setItem("profile", JSON.stringify(profile));
-
-      return resolve({
-        status: 200,
-        data: {
-          message: "Your profile has been created successfully.",
-          profile: {
-            email: profile.email,
-            username: profile.username,
-            userId: profile.userId,
-          },
-        },
-      });
-    }, delay);
-  });
+  return fetchService("/api/register", { method: "POST", data: profile });
 }
 
 export function login(profile) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const _profile = JSON.parse(localStorage.getItem("profile"));
-
-      if (
-        _profile.username === profile.username &&
-        _profile.password === profile.password
-      ) {
-        return resolve({
-          status: 200,
-          data: {
-            message: "You are logged in successfully.",
-            profile: {
-              email: _profile.email,
-              username: _profile.username,
-              userId: _profile.userId,
-            },
-          },
-        });
-      }
-
-      return reject({
-        status: 401,
-        data: {
-          message: "Your username and/or password is wrong.",
-          profile: {},
-        },
-      });
-    }, delay);
-  });
+  return fetchService("/api/login", { method: "POST", data: profile });
 }
 
 export function forgotPassword(profile) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const _profile = JSON.parse(localStorage.getItem("profile"));
-
-      return resolve({
-        status: 200,
-        data: {
-          message:
-            "Your temporary profile password is sent to your registered email.",
-          profile: {
-            email: _profile.email,
-            username: _profile.username,
-            userId: _profile.userId,
-            password: _profile.password,
-          },
-        },
-      });
-    }, delay);
-  });
+  return fetchService("/api/forgotPassword", { method: "POST", data: profile });
 }
 
 export function getSlpData(query) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      let productList = PRODUCTS_LIST;
-
-      if (query) {
-        const _query = query.toLowerCase();
-
-        productList = PRODUCTS_LIST.filter((product) => {
-          const { name, tags, categories } = product;
-          const _tags = tags.join(" ");
-          const _categories = categories.join(" ");
-          const _queryStr = `${name} ${_tags} ${_categories}`.toLowerCase();
-
-          return _queryStr.indexOf(_query) > -1;
-        });
-      }
-
-      return resolve({
-        status: 200,
-        data: productList,
-      });
-    }, delay);
+  return fetchService("/api/inventory", {
+    query,
   });
 }
 
