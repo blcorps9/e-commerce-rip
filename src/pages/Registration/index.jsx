@@ -1,13 +1,12 @@
 import React, { Component } from "react";
+import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { push } from "connected-react-router";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { showLoader, hideLoader } from "../../store/actions";
-import { register } from "../../server";
+import { register } from "../../store/session";
 
 // Controlled vs Uncontrolled component - Reactjs.org
 // Ref - Reactjs.org
@@ -46,12 +45,13 @@ class Registration extends Component {
     }
 
     if (!_isEmpty(formData)) {
-      this.props.showLoader();
-      register(formData).then((resp) => {
-        if (resp.status === 201) {
-          toast.success(resp.data.message);
-          this.props.push("/");
-          this.props.hideLoader();
+      this.props.register(formData).then((res) => {
+        if (res && res.message) {
+          if (res.success) {
+            toast.success(res.message);
+          } else {
+            toast.error(res.message);
+          }
         }
       });
     }
@@ -183,4 +183,9 @@ class Registration extends Component {
   }
 }
 
-export default connect(null, { showLoader, hideLoader, push })(Registration);
+export default connect(
+  (state) => ({
+    isLoggedIn: _get(state.user, "isLoggedIn", false),
+  }),
+  { register }
+)(Registration);

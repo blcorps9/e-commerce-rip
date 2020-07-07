@@ -2,6 +2,8 @@ import React from "react";
 import _get from "lodash/get";
 import _range from "lodash/range";
 import _last from "lodash/last";
+import _size from "lodash/size";
+import _map from "lodash/map";
 import _sampleSize from "lodash/sampleSize";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -35,7 +37,7 @@ function ConfirmationPage(props) {
   } = props;
   const lastOrder = _last(myOrders) || {};
   const { items } = lastOrder;
-  const itemCount = items.length;
+  const itemCount = _size(items);
   const date = new Date();
   const fromDate = new Date(new Date().setDate(date.getDate() + 2));
   const formDateReadable = formatDateToReadble(fromDate);
@@ -85,7 +87,7 @@ function ConfirmationPage(props) {
                 <div className="card-body">
                   <h6 className="card-title">Order Items</h6>
                   <ul className="list-group list-group-flush">
-                    {items.map((item, index) => {
+                    {_map(items, (item, index) => {
                       const color = _sampleSize(item.colors, 1)[0];
                       const { quantity, availableQuantity } = item;
 

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import cx from "classnames";
+import _get from "lodash/get";
 import _debounce from "lodash/debounce";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -15,13 +17,7 @@ import {
 import { uuidv4 } from "../../utils";
 
 import { getProducts } from "../../store/actions";
-// Task:
-// 1. Show an alert with the user search query from search box on
-// click of search icon of enter - Done
-
-// - Listener - click event and enter event-- - callback
-
-// - Show alert('Message')
+import { autoLogin, logout } from "../../store/session";
 
 class Header extends Component {
   constructor(props) {
@@ -32,7 +28,6 @@ class Header extends Component {
       query: "",
       catDropdown: "",
       activeMenuItem: "",
-      isLoggedIn: true, // TODO: Make it dynamic by using session apis
     };
 
     this.fetchProductsDebounced = _debounce(
@@ -43,6 +38,19 @@ class Header extends Component {
         trailing: true,
       }
     );
+  }
+
+  componentDidMount() {
+    this.props.autoLogin({
+      fetch: [
+        "cartCount",
+        "myCart",
+        "myFavList",
+        "myOrders",
+        "myAddresses",
+        "myCards",
+      ],
+    });
   }
 
   toggleMenu = (e) => {
@@ -106,8 +114,7 @@ class Header extends Component {
 
   render() {
     const { showMenu, catDropdown, activeMenuItem } = this.state;
-    const { cart } = this.props;
-    const cartCount = cart.data.length;
+    const { cartCount, isLoggedIn } = this.props;
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -164,11 +171,24 @@ class Header extends Component {
               let subItems = [...item.subItems];
 
               if (item.isMyAccount) {
-                if (this.state.isLoggedIn) {
+                if (isLoggedIn) {
                   subItems.push({
                     key: uuidv4(),
                     label: "Log out",
                     link: "/logout",
+                    onClick: (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      this.props.logout().then((res) => {
+                        if (res && res.message) {
+                          if (res.success) {
+                            toast.success(res.message);
+                          } else {
+                            toast.error(res.message);
+                          }
+                        }
+                      });
+                    },
                   });
                 } else {
                   subItems = [
@@ -233,16 +253,18 @@ class Header extends Component {
                           return <div className="dropdown-divider"></div>;
                         }
 
-                        return (
-                          <Link
-                            key={subItem.key ? subItem.key : uuidv4()}
-                            className="dropdown-item"
-                            to={subItem.link}
-                            data-data={subItem.label}
-                          >
-                            {subItem.label}
-                          </Link>
-                        );
+                        const itemProps = {
+                          key: subItem.key ? subItem.key : uuidv4(),
+                          className: "dropdown-item",
+                          "data-data": subItem.label,
+                          to: subItem.link,
+                        };
+
+                        if (subItem.onClick) {
+                          itemProps.onClick = subItem.onClick;
+                        }
+
+                        return <Link {...itemProps}>{subItem.label}</Link>;
                       })}
                     </div>
                   )}
@@ -256,6 +278,14 @@ class Header extends Component {
   }
 }
 
-export default connect((state) => ({ cart: state.cart }), { getProducts })(
-  Header
-);
+export default connect(
+  (state) => ({
+    cartCount: _get(state.user, "cartCount", 0),
+    isLoggedIn: _get(state.user, "isLoggedIn", false),
+  }),
+  {
+    getProducts,
+    autoLogin,
+    logout,
+  }
+)(Header);

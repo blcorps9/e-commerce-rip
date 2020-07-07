@@ -2,7 +2,6 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
@@ -30,7 +29,7 @@ module.exports = {
         loader: "babel-loader",
         options: {
           presets: ["@babel/env", "@babel/react"],
-          plugins: ["@babel/plugin-proposal-class-properties", "lodash"],
+          plugins: ["@babel/plugin-proposal-class-properties"],
         },
       },
       {
@@ -102,7 +101,6 @@ module.exports = {
       template: path.resolve(srcDir, "index.html"),
       filename: "index.html",
     }),
-    new LodashModuleReplacementPlugin(),
     // new BundleAnalyzerPlugin(),
   ],
 };

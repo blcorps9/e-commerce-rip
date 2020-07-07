@@ -170,7 +170,9 @@ class Home extends Component {
 
   render() {
     const { cart, common } = this.props;
+
     const cartItemsSku = _map(cart, "sku");
+
     const {
       isSortMenuOpen,
       currentSortOrder,
@@ -246,9 +248,9 @@ class Home extends Component {
             </div>
           </div>
           <div className="col-10">
-            <div className="row my-4">
+            {/* <div className="row my-4">
               <Carousel slides={slides} />
-            </div>
+            </div> */}
             <div className="row my-4">
               {inventory.map((product) => (
                 <Link
@@ -272,8 +274,8 @@ class Home extends Component {
 
 export default connect(
   (state) => ({
-    inventory: state.inventory.data,
-    cart: state.cart.data,
+    inventory: _get(state, ["inventory", "data"], []),
+    cart: _get(state, ["cart", "data"], []),
     common: state.common,
   }),
   {

@@ -2,6 +2,7 @@ import {
   saveNewAddress as _saveNewAddress,
   updateAddress as _updateAddress,
   deleteAddress as _deleteAddress,
+  getAddresses as _getAddresses,
   onSelectDelveryAddress as _onSelectDelveryAddress,
 } from "../../server";
 
@@ -23,6 +24,24 @@ export const SELECT_DELIVERY_ADDRESS_SUCCESS =
   "SELECT_DELIVERY_ADDRESS_SUCCESS";
 export const SELECT_DELIVERY_ADDRESS_FAILURE =
   "SELECT_DELIVERY_ADDRESS_FAILURE";
+
+export const USER_GET_ADDRESSES_REQUEST = "USER_GET_ADDRESSES_REQUEST";
+export const USER_GET_ADDRESSES_SUCCESS = "USER_GET_ADDRESSES_SUCCESS";
+export const USER_GET_ADDRESSES_FAILURE = "USER_GET_ADDRESSES_FAILURE";
+
+export const getAddresses = () => {
+  return (dispatch) => {
+    dispatch({ type: USER_GET_ADDRESSES_REQUEST });
+
+    return _getAddresses()
+      .then((resp) => {
+        dispatch({ type: USER_GET_ADDRESSES_SUCCESS, payload: resp.data });
+      })
+      .catch((err) => {
+        dispatch({ type: USER_GET_ADDRESSES_FAILURE, payload: resp.error });
+      });
+  };
+};
 
 export const saveNewAddress = (address) => {
   return (dispatch) => {

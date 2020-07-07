@@ -1,3 +1,6 @@
+import _get from "lodash/get";
+import _size from "lodash/size";
+
 import {
   getSlpData,
   addToCart as _addToCart,
@@ -30,6 +33,7 @@ import {
   ON_PURCHASE_ORDER_REQUEST,
   ON_PURCHASE_ORDER_SUCCESS,
   ON_PURCHASE_ORDER_FAILURE,
+  USER_UPDATE_CART_COUNT,
 } from "./actionTypes";
 
 export function getProducts(query) {
@@ -65,7 +69,15 @@ export const addToCart = (product) => {
 
     return _addToCart(product)
       .then((resp) => {
-        dispatch({ type: ADD_TO_CART_SUCCESS, payload: resp.data });
+        dispatch({
+          type: ADD_TO_CART_SUCCESS,
+          payload: _get(resp, ["data"], []),
+        });
+
+        dispatch({
+          type: USER_UPDATE_CART_COUNT,
+          payload: _size(_get(resp, ["data"], [])),
+        });
       })
       .catch((err) => {
         dispatch({ type: ADD_TO_CART_FAILURE, payload: err });
@@ -83,7 +95,14 @@ export const removeFromCart = (product) => {
 
     return _removeFromCart(product)
       .then((resp) => {
-        dispatch({ type: REMOVE_FROM_CART_SUCCESS, payload: resp.data });
+        dispatch({
+          type: REMOVE_FROM_CART_SUCCESS,
+          payload: _get(resp, ["data"], []),
+        });
+        dispatch({
+          type: USER_UPDATE_CART_COUNT,
+          payload: _size(_get(resp, ["data"], [])),
+        });
       })
       .catch((err) => {
         dispatch({ type: REMOVE_FROM_CART_FAILURE, payload: err });
@@ -101,7 +120,10 @@ export const addToFavList = (product) => {
 
     return _addToFavList(product)
       .then((resp) => {
-        dispatch({ type: ADD_TO_FAV_SUCCESS, payload: resp.data });
+        dispatch({
+          type: ADD_TO_FAV_SUCCESS,
+          payload: _get(resp, ["data"], []),
+        });
       })
       .catch((err) => {
         dispatch({ type: ADD_TO_FAV_FAILURE, payload: err });
@@ -119,7 +141,10 @@ export const removeFromFavList = (product) => {
 
     return _removeFromFavList(product)
       .then((resp) => {
-        dispatch({ type: REMOVE_FROM_FAV_SUCCESS, payload: resp.data });
+        dispatch({
+          type: REMOVE_FROM_FAV_SUCCESS,
+          payload: _get(resp, ["data"], []),
+        });
       })
       .catch((err) => {
         dispatch({ type: REMOVE_FROM_FAV_FAILURE, payload: err });
@@ -138,6 +163,10 @@ export const onPurchaseOrder = (order) => {
     return _onPurchaseOrder(order)
       .then((resp) => {
         dispatch({ type: ON_PURCHASE_ORDER_SUCCESS, payload: resp.data });
+        dispatch({
+          type: USER_UPDATE_CART_COUNT,
+          payload: 0,
+        });
       })
       .catch((err) => {
         dispatch({ type: ON_PURCHASE_ORDER_FAILURE, payload: err });

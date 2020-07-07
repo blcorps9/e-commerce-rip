@@ -11,7 +11,12 @@ import {
   SELECT_DELIVERY_ADDRESS_REQUEST,
   SELECT_DELIVERY_ADDRESS_SUCCESS,
   SELECT_DELIVERY_ADDRESS_FAILURE,
+  USER_GET_ADDRESSES_REQUEST,
+  USER_GET_ADDRESSES_SUCCESS,
+  USER_GET_ADDRESSES_FAILURE,
 } from "./actions";
+
+import { SET_USER_ADDRESSES } from "../../store/actionTypes";
 
 const initAddrState = {
   inProgress: false,
@@ -64,6 +69,12 @@ export default function myAddresses(state = initAddrState, action) {
         inProgress: false,
         err: action.payload,
       };
+    case SET_USER_ADDRESSES:
+      return {
+        ...state,
+        inProgress: false,
+        data: action.payload,
+      };
     case SELECT_DELIVERY_ADDRESS_REQUEST:
       return { ...state, inProgress: true };
     case SELECT_DELIVERY_ADDRESS_SUCCESS:
@@ -73,6 +84,23 @@ export default function myAddresses(state = initAddrState, action) {
         deliveryAddress: action.payload,
       };
     case SELECT_DELIVERY_ADDRESS_FAILURE:
+      return {
+        ...state,
+        inProgress: false,
+        err: action.payload,
+      };
+    case USER_GET_ADDRESSES_REQUEST:
+      return {
+        ...state,
+        inProgress: true,
+      };
+    case USER_GET_ADDRESSES_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        data: action.payload,
+      };
+    case USER_GET_ADDRESSES_FAILURE:
       return {
         ...state,
         inProgress: false,

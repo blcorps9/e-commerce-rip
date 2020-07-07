@@ -103,9 +103,9 @@ class App extends Component {
                 </Route>
                 <Route path="/confirmation">
                   {(props) => {
-                    // if (props.history.action === "POP") {
-                    //   return <Redirect to="/cart" />;
-                    // }
+                    if (props.history.action === "POP") {
+                      return <Redirect to="/cart" />;
+                    }
 
                     return <ConfirmationPage />;
                   }}
