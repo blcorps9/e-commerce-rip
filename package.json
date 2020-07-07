@@ -9,7 +9,8 @@
     "start": "yarn clean && cross-env NODE_ENV=development webpack-dev-server --progress",
     "clean": "rimraf ./dist",
     "build": "yarn clean && cross-env NODE_ENV=production webpack --progress",
-    "api": "nodemon express.js"
+    "api": "nodemon backend/index.js",
+    "dev": "npm-run-all --parallel api start"
   },
   "dependencies": {
     "@babel/core": "^7.9.0",
@@ -56,7 +57,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "devDependencies": {
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "webpack-bundle-analyzer": "^3.8.0"
   }
 }

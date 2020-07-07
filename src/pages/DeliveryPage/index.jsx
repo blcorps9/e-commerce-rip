@@ -6,6 +6,7 @@ import _map from "lodash/map";
 import AddressForm from "../../components/AddressForm";
 
 import {
+  getAddresses,
   saveNewAddress,
   updateAddress,
   deleteAddress,
@@ -21,6 +22,10 @@ class DeliveryPage extends Component {
       showUpdateFormFor: null,
       selectedDelveryAddress: null,
     };
+  }
+
+  componentDidMount() {
+    this.props.getAddresses();
   }
 
   onClickNewAddr = (e) => {
@@ -183,6 +188,7 @@ class DeliveryPage extends Component {
 }
 
 export default connect((state) => ({ myAddresses: state.myAddresses.data }), {
+  getAddresses,
   saveNewAddress,
   updateAddress,
   deleteAddress,

@@ -3,6 +3,7 @@ import { connectRouter } from "connected-react-router";
 
 import counter from "../pages/Counter/reducer";
 import { inventory, spinner, cart, favList, common, myOrders } from "./reducer";
+import { sessionReducer } from "./session";
 import pdp from "../pages/PDP/reducer";
 import cartData from "../pages/Cart/reducer";
 import myAddresses from "../pages/DeliveryPage/reducer";
@@ -21,5 +22,6 @@ export default (history) =>
     myAddresses,
     myCards,
     myOrders,
+    user: sessionReducer,
     router: connectRouter(history),
   });

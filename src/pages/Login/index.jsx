@@ -1,13 +1,12 @@
 import React, { Component } from "react";
+import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
-import { push } from "connected-react-router";
 import { connect } from "react-redux";
 
-import { showLoader, hideLoader } from "../../store/actions";
-import { login } from "../../server";
+import { login } from "../../store/session";
 
 class Login extends Component {
   onSubmit = (e) => {
@@ -23,16 +22,15 @@ class Login extends Component {
     }
 
     if (!_isEmpty(formData)) {
-      this.props.showLoader();
-      login(formData)
+      this.props
+        .login(formData)
         .then((resp) => {
-          if (resp.status === 200) {
-            toast.success(resp.data.message);
-            this.props.push("/");
-            this.props.hideLoader();
-          } else if (resp.status === 401) {
-            toast.error(resp.data.message);
-            this.props.hideLoader();
+          if (resp && resp.message) {
+            if (resp.success) {
+              toast.success(resp.message);
+            } else {
+              toast.error(resp.message);
+            }
           }
         })
         .catch((err) => {
@@ -107,4 +105,4 @@ class Login extends Component {
   }
 }
 
-export default connect(null, { push, showLoader, hideLoader })(Login);
+export default connect(null, { login })(Login);

@@ -8,6 +8,7 @@ import _isEmpty from "lodash/isEmpty";
 import CardForm from "../../components/CardForm";
 
 import {
+  getCards,
   saveNewCard,
   updateCard,
   deleteCard,
@@ -31,6 +32,10 @@ function PaymentPage(props) {
     inputExpiryYear: "",
     inputCVV: "",
   });
+
+  React.useEffect(() => {
+    props.getCards();
+  }, []);
 
   const onClickUpdate = (e) => {
     e.preventDefault();
@@ -209,6 +214,7 @@ function PaymentPage(props) {
 }
 
 export default connect((state) => ({ myCards: state.myCards.data }), {
+  getCards,
   saveNewCard,
   updateCard,
   deleteCard,

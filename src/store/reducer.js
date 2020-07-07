@@ -1,3 +1,5 @@
+import _get from "lodash/get";
+
 import {
   SHOW_LOADER,
   HIDE_LOADER,
@@ -21,6 +23,9 @@ import {
   ON_PURCHASE_ORDER_REQUEST,
   ON_PURCHASE_ORDER_SUCCESS,
   ON_PURCHASE_ORDER_FAILURE,
+  SET_USER_CART,
+  SET_USER_FAV_LIST,
+  SET_USER_ORDERS,
 } from "./actionTypes";
 
 const initialInventoryState = {
@@ -74,6 +79,8 @@ export function cart(state = initialCartState, action) {
       return { ...state, inProgress: false, err: action.payload };
     case ON_PURCHASE_ORDER_SUCCESS:
       return { ...state, inProgress: false, data: [] };
+    case SET_USER_CART:
+      return { ...state, inProgress: false, data: action.payload };
     default:
       return state;
   }
@@ -98,6 +105,8 @@ export function favList(state = initialFavListState, action) {
       return { ...state, inProgress: false, data: action.payload };
     case REMOVE_FROM_FAV_FAILURE:
       return { ...state, inProgress: false, err: action.payload };
+    case SET_USER_FAV_LIST:
+      return { ...state, inProgress: false, data: action.payload };
     default:
       return state;
   }
@@ -134,6 +143,8 @@ export function myOrders(state = initialMyOrdersState, action) {
       return { ...state, inProgress: false, data: action.payload };
     case ON_PURCHASE_ORDER_FAILURE:
       return { ...state, inProgress: false, err: action.payload };
+    case SET_USER_ORDERS:
+      return { ...state, inProgress: false, data: action.payload };
     default:
       return state;
   }

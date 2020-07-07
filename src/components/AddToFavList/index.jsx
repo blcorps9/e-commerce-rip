@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import _get from "lodash/get";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { addToFavList, removeFromFavList } from "../../store/actions";
 import { ITEM_FAV_COLOR_DEFAULT, ITEM_FAV_COLOR_ADDED } from "../../config";
@@ -73,7 +74,10 @@ class AddToFavList extends Component {
   }
 }
 
-export default connect((state) => ({ favList: state.favList.data }), {
-  addToFavList,
-  removeFromFavList,
-})(AddToFavList);
+export default connect(
+  (state) => ({ favList: _get(state, ["favList", "data"], []) }),
+  {
+    addToFavList,
+    removeFromFavList,
+  }
+)(AddToFavList);

@@ -11,7 +11,12 @@ import {
   SELECT_PAYMENT_METHOD_REQUEST,
   SELECT_PAYMENT_METHOD_SUCCESS,
   SELECT_PAYMENT_METHOD_FAILURE,
+  GET_CARDS_REQUEST,
+  GET_CARDS_SUCCESS,
+  GET_CARDS_FAILURE,
 } from "./actions";
+
+import { SET_USER_CARDS } from "../../store/actionTypes";
 
 const initAddrState = {
   inProgress: false,
@@ -78,6 +83,12 @@ export default function myCards(state = initAddrState, action) {
         inProgress: false,
         err: action.payload,
       };
+    case SET_USER_CARDS:
+      return {
+        ...state,
+        inProgress: false,
+        data: action.payload,
+      };
     case SELECT_PAYMENT_METHOD_REQUEST:
       return { ...state, inProgress: true };
     case SELECT_PAYMENT_METHOD_SUCCESS:
@@ -87,6 +98,23 @@ export default function myCards(state = initAddrState, action) {
         paymentMethod: action.payload,
       };
     case SELECT_PAYMENT_METHOD_FAILURE:
+      return {
+        ...state,
+        inProgress: false,
+        err: action.payload,
+      };
+    case GET_CARDS_REQUEST:
+      return {
+        ...state,
+        inProgress: true,
+      };
+    case GET_CARDS_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        data: action.payload,
+      };
+    case GET_CARDS_FAILURE:
       return {
         ...state,
         inProgress: false,

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import _get from "lodash/get";
 
 import Placeholder from "../Svgs/Placeholder";
 import Colors from "../Colors";
@@ -13,9 +15,19 @@ class ProductCard extends Component {
   addToCart = (event) => {
     event.preventDefault();
 
-    this.props.addToCart({
-      sku: event.currentTarget.getAttribute("data-sku"),
-    });
+    if (this.props.isLoggedIn) {
+      this.props.addToCart({
+        sku: event.currentTarget.getAttribute("data-sku"),
+        quantity: 1,
+      });
+    } else {
+      const { pathname, search } = this.props.location;
+
+      this.props.history.push({
+        pathname: "/login",
+        state: { pathname, search },
+      });
+    }
   };
 
   removeFromCart = (event) => {
@@ -75,4 +87,7 @@ class ProductCard extends Component {
   }
 }
 
-export default connect(null, { addToCart, removeFromCart })(ProductCard);
+export default connect(
+  (state) => ({ isLoggedIn: _get(state.user, "isLoggedIn", false) }),
+  { addToCart, removeFromCart }
+)(withRouter(ProductCard));
